@@ -1,10 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+<h1>Chi tiết hóa đơn</h1>
+<p>Mã hóa đơn: {{ bill.bill_id }}</p>
+<p>Bàn: {{ bill.table.table_number }}</p>
+<p>Tổng tiền: {{ bill.total_price }}</p>
+<p>Đã thanh toán: {{ bill.is_payed }}</p>
