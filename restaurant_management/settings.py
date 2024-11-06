@@ -30,13 +30,16 @@ ALLOWED_HOSTS = []
 
 # settings.py
 
+# settings.py
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
+    BASE_DIR / "static",  # This should point to the "static" folder in your project directory
 ]
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  
+# Add STATIC_ROOT for production, but this is optional for development
+STATIC_ROOT = BASE_DIR / "staticfiles"
+ 
 
 
 # Application definition
@@ -84,16 +87,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'restaurant_management.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 
 DATABASES = {
     'default': {
