@@ -1,3 +1,5 @@
+import pymysql
+pymysql.install_as_MySQLdb()
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -51,14 +53,13 @@ WSGI_APPLICATION = 'restaurant_management.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'restaurantdb',
+        'NAME': 'restaurantdb1',
         'USER': 'root',
-        'PASSWORD': '',
+        'PASSWORD': '',  # Nếu không có mật khẩu thì để trống
         'HOST': 'localhost',
         'PORT': '3306',
     }
 }
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -83,5 +84,8 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

@@ -2,9 +2,100 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách hóa đơn</title>
 </head>
 <body>
+    <h1>Danh sách hóa đơn</h1>
 
+    <table class="bill-table">
+        <thead>
+            <tr>
+                <th>Mã hóa đơn</th>
+                <th>Ngày</th>
+                <th>Bàn</th>
+                <th>Tổng tiền</th>
+                <th>Thanh toán</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for bill in bills %}
+                <tr>
+                    <td>{{ bill.bill_id }}</td>
+                    <td>{{ bill.time|date:"d/m/Y H:i" }}</td>
+                    <td>{{ bill.table.table_number }}</td>
+                    <td>{{ bill.total_price }}</td>
+                    <td class="{% if bill.is_payed %}paid{% else %}unpaid{% endif %}">
+                        {{ bill.is_payed|yesno:"Đã thanh toán, Chưa thanh toán" }}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4">Không có hóa đơn nào.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </body>
 </html>
+
+<style>
+    /* General Styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    text-align: center;
+    color: #444;
+    margin-top: 20px;
+    font-size: 2em;
+}
+
+/* Table Styling */
+.bill-table {
+    width: 80%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.bill-table th, .bill-table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.bill-table th {
+    background-color: #333;
+    color: #fff;
+    font-weight: bold;
+}
+
+.bill-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.bill-table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Conditional Formatting for Payment Status */
+.bill-table .paid {
+    color: #008000;  /* Green for paid */
+    font-weight: bold;
+}
+
+.bill-table .unpaid {
+    color: #d9534f; /* Red for unpaid */
+    font-weight: bold;
+}
+.bill-table th:nth-child(2), .bill-table td:nth-child(2) {
+    width: 15%;
+}
+</style>

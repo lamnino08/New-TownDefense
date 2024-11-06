@@ -16,6 +16,7 @@ urlpatterns = [
     path('kitchen-orders/', views.kitchen_orders, name='kitchen_orders'),
     path('checkout/<int:bill_id>/', views.checkout, name='checkout'),
     path('bill/<int:bill_id>/', views.bill_detail, name='bill_detail'),
+    path('bills/', views.bill_list, name='bill_list'),
 
     # Add this line for the homepage (root URL)
     path('', views.index, name='home'),

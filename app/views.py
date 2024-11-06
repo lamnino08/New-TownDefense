@@ -106,6 +106,10 @@ def bill_detail(request, bill_id):
     bill = get_object_or_404(Bill, bill_id=bill_id)
     return render(request, 'bill/detail.html', {'bill': bill})
 
+def bill_list(request):
+    bills = Bill.objects.all()  # Get all bills
+    bills = Bill.objects.all().order_by('-time')
+    return render(request, 'bill/list.html', {'bills': bills})
 
 def order_dish(request):
     if request.method == 'POST':
