@@ -5,74 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="50168d4e-1a58-470a-bcb5-3ccae0dcdc13" name="Changes" comment="Initial commit">
-      <change afterPath="$PROJECT_DIR$/app/controllers/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/controllers/bill_controller.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/controllers/dish_controller.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/controllers/kitchen_controller.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/controllers/menu_controller.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/controllers/reservation_controller.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/controllers/table_controller.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/app/controllers/views.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/models/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/models/bill_model.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/models/categorydish_model.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/models/cookmethod_model.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/models/department_model.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/models/dishorder_model.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/models/menu_model.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/models/reservation_model.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/models/role_model.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/models/staff_model.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/models/table_model.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/models/user_model.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/routes/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/routes/bill_routes.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/routes/dish_routes.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/routes/kitchen_routes.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/routes/menu_routes.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/routes/reservation_routes.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/routes/table_routes.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/app/routes/urls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/views/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/views/menu/detail.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/views/menu/menu_list.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/views/menu/order.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/views/menu/update_order.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/views/reservation/view_table_status.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/Restaurant_management.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Restaurant_management.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/example/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/bill/detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/example/templates/bill/detail.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/bill/list.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/bill/detail.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/dish/order_dish.html" beforeDir="false" afterPath="$PROJECT_DIR$/example/templates/dish/order_dish.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/kitchen/orders.html" beforeDir="false" afterPath="$PROJECT_DIR$/example/templates/kitchen/orders.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/kitchen/update_status.html" beforeDir="false" afterPath="$PROJECT_DIR$/example/templates/kitchen/update_status.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/membership/points.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/dish/order_dish.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/menu/detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/example/templates/menu/detail.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/menu/menu_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/example/templates/menu/menu_list.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/menu/order.html" beforeDir="false" afterPath="$PROJECT_DIR$/example/templates/menu/order.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/menu/update_order.html" beforeDir="false" afterPath="$PROJECT_DIR$/example/templates/menu/update_order.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/order_dish.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/order_dish.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/payment/invoice.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/kitchen/orders.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/payment/payment.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/kitchen/update_status.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/reservation/create.html" beforeDir="false" afterPath="$PROJECT_DIR$/example/templates/reservation/create.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/reservation/list.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/reservation/manage.html" beforeDir="false" afterPath="$PROJECT_DIR$/example/templates/reservation/manage.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/shift/list.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/shift/manage.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/reservation/manage.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/staff/create.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/reservation/create.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/staff/list.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/staff/update.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/table/view_table_status.html" beforeDir="false" afterPath="$PROJECT_DIR$/example/templates/table/view_table_status.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/user/login.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/user/profile.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/user/register.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/example/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/example/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/restaurant_management/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/restaurant_management/urls.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -119,21 +55,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "DefaultHtmlFileTemplate": "HTML File",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "truong__test",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;RunOnceActivity.OpenDjangoStructureViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;truong__test&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/nhattruong/Desktop/CHUYENNGANH/Nam 5/Ki 1/DRF/Restaurant_management&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/restaurant_management" />
@@ -185,7 +123,10 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1729568259430</updated>
-      <workItem from="1729568260770" duration="20494000" />
+      <workItem from="1729568260770" duration="22146000" />
+      <workItem from="1730653406154" duration="42000" />
+      <workItem from="1730653449191" duration="1046000" />
+      <workItem from="1730895880674" duration="634000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <option name="closed" value="true" />
