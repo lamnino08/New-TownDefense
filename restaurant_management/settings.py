@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,6 +27,16 @@ SECRET_KEY = 'django-insecure-vc3tprcl!ch(#_w(--g7he2o-_zx#ly(ueach3_f(rg)@a=ozo
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+# settings.py
+
+STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  
 
 
 # Application definition
@@ -58,8 +69,8 @@ ROOT_URLCONF = 'restaurant_management.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
+        'DIRS': [os.path.join(BASE_DIR, 'restaurant_management', 'templates')],  # Base template directory
+        'APP_DIRS': True,  # Enable Django to find templates in each app's templates folder
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -84,6 +95,16 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'restaunrant',
+#         'USER': 'root',
+#         'PASSWORD': '',  
+#         'HOST': 'localhost',
+#         'PORT': '3306',
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators

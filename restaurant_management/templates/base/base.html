@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Restaurant Management{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1>Restaurant Management System</h1>
+    </header>
+    
+    <!-- Navbar -->
+    <nav>
+        <ul>
+            {% comment %} <li><a href="{% url 'home' %}">Home</a></li> {% endcomment %}
+            {% comment %} <li><a href="{% url 'auth:login' %}">Login</a></li> {% endcomment %}
+            {% comment %} <li><a href="{% url 'table:table_list' %}">Tables</a></li> {% endcomment %}
+            {% comment %} <li><a href="{% url 'role:role_list' %}">Roles</a></li> {% endcomment %}
+        </ul>
+    </nav>
+    
+    <!-- Main Content Area -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Restaurant Management System</p>
+    </footer>
+</body>
+</html>
