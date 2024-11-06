@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Cập nhật trạng thái món</h2>
+<form method="post">
+    {% csrf_token %}
+    <label for="status">Trạng thái món:</label>
+    <select id="status" name="status">
+        <option value="available">Còn món</option>
+        <option value="out_of_stock">Hết món</option>
+    </select>
+    <button type="submit">Cập nhật</button>
+</form>
+{% endblock %}
