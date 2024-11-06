@@ -1,0 +1,8 @@
+def order_dish(request):
+    if request.method == 'POST':
+        # Xử lý logic cho việc gọi món ăn
+        pass
+
+    # Hiển thị danh sách món ăn và template
+    dishes = Menu.objects.filter(is_available=True)
+    return render(request, 'dish/order_dish.html', {'dishes': dishes})

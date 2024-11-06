@@ -1,0 +1,13 @@
+<h1>Gọi món ăn</h1>
+<form method="post" action="{% url 'order_dish' %}">
+    {% csrf_token %}
+    <label for="dish">Chọn món ăn:</label>
+    <select name="dish" id="dish">
+        {% for dish in dishes %}
+        <option value="{{ dish.dish_id }}">{{ dish.name }} - {{ dish.price }}</option>
+        {% endfor %}
+    </select>
+    <label for="quantity">Số lượng:</label>
+    <input type="number" name="quantity" id="quantity" min="1" required>
+    <button type="submit">Gọi món</button>
+</form>

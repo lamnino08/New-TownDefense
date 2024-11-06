@@ -1,0 +1,21 @@
+<h2>Danh sách thực đơn</h2>
+<table border="1">
+    <thead>
+        <tr>
+            <th>Tên món ăn</th>
+            <th>Mô tả</th>
+            <th>Giá</th>
+            <th>Trạng thái</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for menu in menus %}
+        <tr>
+            <td>{{ menu.name }}</td>
+            <td>{{ menu.description }}</td>
+            <td>{{ menu.price }}</td>
+            <td>{{ "Available" if menu.is_available else "Not Available" }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
