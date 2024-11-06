@@ -1,0 +1,19 @@
+<h1>Trạng thái bàn</h1>
+<table border="1">
+    <thead>
+    <tr>
+        <th>Số bàn</th>
+        <th>Trạng thái</th>
+        <th>Sức chứa</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for table in tables %}
+    <tr>
+        <td>{{ table.table_number }}</td>
+        <td>{{ "Trống" if table.is_available else "Đã đặt" }}</td>
+        <td>{{ table.ability }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
