@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Table, Reservation, DishOrder, Menu, Bill
 from .forms import ReservationForm, DishOrderForm
-
+from django.db.models import Q
+from django.shortcuts import render
 
 def menu_list(request):
     menus = Menu.objects.all()  # Lấy tất cả các món ăn từ bảng Menu
@@ -106,11 +107,26 @@ def bill_detail(request, bill_id):
     bill = get_object_or_404(Bill, bill_id=bill_id)
     return render(request, 'bill/detail.html', {'bill': bill})
 
+# def bill_list(request):
+#     bills = Bill.objects.all()  # Get all bills
+#     bills = Bill.objects.all().order_by('-time')
+#     return render(request, 'bill/list.html', {'bills': bills})
 def bill_list(request):
-    bills = Bill.objects.all()  # Get all bills
-    bills = Bill.objects.all().order_by('-time')
-    return render(request, 'bill/list.html', {'bills': bills})
+    search_query = request.GET.get('search', '') 
 
+    bills = Bill.objects.all()
+
+    if search_query:
+   
+        bills = bills.filter(
+            Q(bill_id__icontains=search_query) |  #  ID
+            Q(table__table_number__icontains=search_query) |  #  table number
+            Q(time__icontains=search_query) |  #  date/time
+            Q(total_price__icontains=search_query) |  # total price 
+            Q(is_payed__icontains=search_query)  # payment
+        )
+
+    return render(request, 'bill/list.html', {'bills': bills, 'search_query': search_query})
 def order_dish(request):
     if request.method == 'POST':
         # Lấy thông tin từ form gọi món

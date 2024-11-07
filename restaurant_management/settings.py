@@ -55,11 +55,12 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'restaurantdb1',
         'USER': 'root',
-        'PASSWORD': '',  # Nếu không có mật khẩu thì để trống
+        'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': '3306',
     }
 }
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
