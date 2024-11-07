@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Danh Sách Món Ăn</h2>
+<table border="1">
+    <tr>
+        <th>Tên Món</th>
+        <th>Mô Tả</th>
+        <th>Giá</th>
+        <th>Trạng Thái</th>
+    </tr>
+    {% for menu in menus %}
+    <tr>
+        <td>{{ menu.name }}</td>
+        <td>{{ menu.description }}</td>
+        <td>{{ menu.price }}</td>
+        <td>{{ 'Có sẵn' if menu.is_available else 'Hết hàng' }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

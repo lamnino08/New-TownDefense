@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Gọi Món Ăn</h1>
+<form method="post">
+    {% csrf_token %}
+    <label for="dish">Tên món:</label>
+    <input type="text" id="dish" name="dish" required>
+
+    <label for="quantity">Số lượng:</label>
+    <input type="number" id="quantity" name="quantity" required>
+
+    <button type="submit">Gọi món</button>
+</form>
+{% endblock %}
