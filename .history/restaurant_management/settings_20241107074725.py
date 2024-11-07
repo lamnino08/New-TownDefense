@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+<<<<<<< HEAD
+=======
 # settings.py
 
 STATIC_URL = '/static/'
@@ -35,9 +37,10 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  
 
 
+>>>>>>> 8815bec (base html)
 # Application definition
 
 INSTALLED_APPS = [
@@ -69,9 +72,13 @@ ROOT_URLCONF = 'restaurant_management.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        # Base template directory
-        'DIRS': [os.path.join(BASE_DIR, 'restaurant_management', 'templates')],
+<<<<<<< HEAD
+        'DIRS': [BASE_DIR / 'table_service/views'],
+        'APP_DIRS': True,
+=======
+        'DIRS': [os.path.join(BASE_DIR, 'restaurant_management', 'templates')],  # Base template directory
         'APP_DIRS': True,  # Enable Django to find templates in each app's templates folder
+>>>>>>> 8815bec (base html)
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -99,17 +106,20 @@ DATABASES = {
     }
 }
 
+<<<<<<< HEAD
+=======
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.mysql',
 #         'NAME': 'restaunrant',
 #         'USER': 'root',
-#         'PASSWORD': '',
+#         'PASSWORD': '',  
 #         'HOST': 'localhost',
 #         'PORT': '3306',
 #     }
 # }
 
+>>>>>>> 8815bec (base html)
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
