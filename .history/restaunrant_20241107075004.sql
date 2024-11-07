@@ -533,10 +533,13 @@ CREATE TABLE `staff` (
   `username` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+<<<<<<< HEAD
+=======
 ALTER TABLE `staff`
   ADD UNIQUE (`username`);
 
 
+>>>>>>> 0958e5d (init admin service)
 --
 -- Dumping data for table `staff`
 --
