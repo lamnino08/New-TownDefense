@@ -1,0 +1,25 @@
+{% extends 'base/base.html' %}
+{% block content %}
+
+<h1>Danh sách Bàn và Trạng Thái</h1>
+<table>
+    <tr>
+        <th>Số bàn</th>
+        <th>Trạng thái</th>
+        <th>Sức chứa</th>
+    </tr>
+    {% for table in tables %}
+    <tr>
+        <td>{{ table.table_number }}</td>
+        <td>
+            {% if table.is_available %}
+            Còn trống
+            {% else %}
+            Đã đặt
+            {% endif %}
+        </td>
+        <td>{{ table.capacity }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
