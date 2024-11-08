@@ -6,10 +6,10 @@ def login_user(username, password):
     Attempt to authenticate a user with the provided username and password.
     """
     staff_backend = StaffBackend()
-    staff = staff_backend.authenticate(username=username, password=password)  
+    staff = staff_backend.authenticate(username=username, password=password)
 
     if staff is not None:
-        # Return a dictionary with success status and relevant staff details
+        # Return a dictionary with success status, staff details, and role information
         return {
             "status": "success",
             "staff": {
@@ -17,8 +17,13 @@ def login_user(username, password):
                 "username": staff.username,
                 "name": staff.name,
                 "phone_number": staff.phone_number,
-                # Add other necessary fields
+                "role": {
+                    "role_id": staff.role.role_id,
+                    "description": staff.role.description,
+                    "firstPage": staff.role.first_page,
+                }
             }
         }
+    else:
         # Invalid credentials
         return {"status": "error", "message": "Invalid username or password"}

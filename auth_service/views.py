@@ -23,10 +23,25 @@ def login_api(request):
             status_code = 200 if result["status"] == "success" else 401
             
             if result["status"] == "success":
-                staff = result["staff"];
-                request.session['username'] = staff.username
-                request.session['staff_id'] = staff.staff_id
-            return JsonResponse(result, status=status_code)
+                # Extract staff and role information
+                staff = result["staff"]
+                role = staff["role"]
+                
+                # Store necessary session data
+                request.session['username'] = staff["username"]
+                request.session['staff_id'] = staff["staff_id"]
+                request.session['role_id'] = role["role_id"]
+                request.session['firstPage'] = role["firstPage"]
+
+                # Return the success response with the firstPage for redirection
+                return JsonResponse({
+                    "status": "success",
+                    "message": "Login successful",
+                    "firstPage": role["firstPage"],
+                }, status=200)
+            else:
+                # Return error message if authentication failed
+                return JsonResponse(result, status=401)
         
         except json.JSONDecodeError:
             return JsonResponse({"status": "error", "message": "Invalid JSON data"}, status=400)

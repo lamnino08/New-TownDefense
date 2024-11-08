@@ -25,7 +25,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (response.ok) {
                 errorMessage.style.display = "none";
-                window.location.href = "/"; 
+                const firstPage = result.firstPage || "/";
+                window.location.assign(firstPage);
             } else {
                 errorMessage.textContent = result.message || "Login failed. Please check your credentials.";
                 errorMessage.style.display = "block";

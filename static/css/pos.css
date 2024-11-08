@@ -20,3 +20,37 @@
     padding: 1rem; /* Add padding as needed */
     
 }
+
+/* Đặt chiều cao tối đa cho cây với đường cuộn */
+#departmentTree {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+/* Tạo đường kẻ nối các mục cha và con */
+.jstree li > ul > li {
+    position: relative;
+}
+
+.jstree li > ul > li::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -20px;
+    height: 100%;
+    border-left: 1px solid #ccc;
+}
+
+.jstree li > ul > li:last-child::before {
+    height: 10px;
+}
+
+.jstree li > ul::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -20px;
+    width: 20px;
+    border-top: 1px solid #ccc;
+}
+

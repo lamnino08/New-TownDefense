@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     
     'auth_service',
     'admin_service',
+    'role_service',
 ]
 
 MIDDLEWARE = [

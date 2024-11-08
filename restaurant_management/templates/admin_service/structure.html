@@ -1,0 +1,43 @@
+    <div class="my-2">
+        <h2>Department & Role Management</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <!-- Sidebar Tree for Departments & Roles -->
+                <div id="departmentTree" class="border p-3 rounded"></div>
+            </div>
+            <div class="col-md-8">
+                <h4>Details</h4>
+                <div id="detailsPanel" class="p-3 border rounded">
+                    <p>Select a department or role from the tree to view details.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="addDepartmentModal" tabindex="-1" aria-labelledby="addDepartmentModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addDepartmentModalLabel">Add Department/Role</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="departmentForm">
+                        <div class="mb-3">
+                            <label for="departmentName" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="departmentName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="departmentDescription" class="form-label">Description</label>
+                            <textarea class="form-control" id="departmentDescription"></textarea>
+                        </div>
+                        <input type="hidden" id="parentDepartment">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="saveDepartment()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
