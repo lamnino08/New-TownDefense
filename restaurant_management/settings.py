@@ -52,7 +52,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
-    'auth_service',
+    'auth_service', 
+    'inventory_service',
 ]
 
 AUTH_USER_MODEL = 'auth_service.CustomUser'
@@ -91,7 +92,7 @@ WSGI_APPLICATION = 'restaurant_management.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'restaurant',
+        'NAME': 'drf1',
         'USER': 'root',
         'PASSWORD': '',  
         'HOST': 'localhost',

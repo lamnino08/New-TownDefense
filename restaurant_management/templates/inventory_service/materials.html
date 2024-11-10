@@ -1,0 +1,49 @@
+{% extends "base/base.html" %}
+
+{% block title %}Restaurant Management{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Danh sách tồn kho</h2>
+    
+    <table class="table table-bordered table-striped mt-3">
+        <thead class="table-dark">
+            <tr>
+                <th>Mã Nguyên Liệu</th>
+                <th>Tên Nguyên Liệu</th>
+                <th>Số Lượng Tồn Kho</th>
+                <th>Đơn Vị Tính</th>
+                <th>Đơn Giá</th>
+                <th>Giá Trị Tồn Kho</th>
+                <th>Ngày Nhập Kho</th>
+                <th>Ngày Hết Hạn</th>
+                <th>Nhà Cung Cấp</th>
+                <th>Trạng Thái Nguyên Liệu</th>
+            </tr>
+        </thead>
+        <tbody>
+           
+                {% for ingredient in ingredients %}
+                    <tr>
+                        <td>{{ ingredient.ingredient_code }}</td>
+                        <td>{{ ingredient.ingredient_name }}</td>
+                        <td>{{ ingredient.stock_quantity }}</td>
+                        <td>{{ ingredient.unit }}</td>
+                        <td>{{ ingredient.unit_price }}</td>
+                        <td>{{ ingredient.stock_value }}</td>
+                        <td>{{ ingredient.import_date }}</td>
+                        <td>{{ ingredient.expiry_date }}</td>
+                        <td>{{ ingredient.supplier_name }}</td>
+                        <td>{{ ingredient.status }}</td>
+                    </tr>
+                {% endfor %}
+            
+               
+          
+        </tbody>
+    </table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+{% endblock %}

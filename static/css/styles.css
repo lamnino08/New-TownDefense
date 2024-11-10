@@ -11241,3 +11241,44 @@ body {
   font-size: 0.75rem;
   border-radius: 0.375rem !important;
 }
+
+/* Làm tròn các góc của menu */
+.custom-dropdown-menu {
+  position: relative; /* Đảm bảo dropdown có vị trí để z-index hoạt động */
+  z-index: 9999; /* Đặt z-index cao hơn các vùng khác */
+  border-radius: 8px;
+  border: none;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15); /* Đổ bóng mềm để tạo chiều sâu */
+  background-color: #fdfdfd; /* Màu nền trắng tinh tế */
+  min-width: 200px;
+  padding: 8px 0;
+  transition: all 0.3s ease;
+}
+
+
+/* Tuỳ chỉnh từng mục trong menu */
+.custom-dropdown-menu .dropdown-item {
+  padding: 12px 20px;
+  color: #343a40;
+  font-weight: 500;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Hiệu ứng hover mượt mà và đổi màu */
+.custom-dropdown-menu .dropdown-item:hover {
+  background-color: #007bff;
+  color: #fff;
+  transform: translateX(5px); /* Di chuyển nhẹ nhàng khi hover */
+}
+
+/* Hiệu ứng khi click vào menu */
+.custom-dropdown-menu .dropdown-item:active {
+  background-color: #0056b3;
+}
+
+/* Thêm khoảng cách giữa các item */
+.custom-dropdown-menu .dropdown-item + .dropdown-item {
+  margin-top: 5px;
+}
+

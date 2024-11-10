@@ -58,7 +58,7 @@
     <!-- Top Navigation Bar -->
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
         <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
-        <a class="navbar-brand ps-3" href="#">Johnny's Staff Panel</a>
+        <a class="navbar-brand ps-3" href="#">BAO RESTAURANT</a>
     </nav>
 
     <div id="layoutSidenav" >
@@ -68,60 +68,27 @@
                 <div class="sb-sidenav-menu">
                     <div class="nav flex-column">
                         <div class="sb-sidenav-menu-heading">Main</div>
-                        <button class="nav-link bg-dark" onclick="getPanel('pos-panel')">
+                        <button class="nav-link bg-dark" onclick="window.location.href='{% url 'materials' %}'">
                             <div class="sb-nav-link-icon"><i class="fas fa-cash-register"></i></div>
-                            Point of Sale
+                            Tồn kho
                         </button>
-                        <button class="nav-link bg-dark" onclick="getPanel('bill-panel')">
+                        <button class="nav-link bg-dark" onclick="window.location.href='{% url 'home' %}'">
                             <div class="sb-nav-link-icon"><i class="fas fa-receipt"></i></div>
-                            Bills
+                            Nhà cung cấp
                         </button>
                         <button class="nav-link bg-dark" onclick="getPanel('table-panel')">
                             <div class="sb-nav-link-icon"><i class="fas fa-table-cells"></i></div>
-                            Table
+                            Nhập nguyên liệu 
                         </button>
                         <button class="nav-link bg-dark" onclick="getPanel('menu-panel')">
                             <div class="sb-nav-link-icon"><i class="fas fa-utensils"></i></div>
-                            Menu
+                            Báo cáo thống kê 
                         </button>
-                        <button class="nav-link bg-dark" onclick="getPanel('reservation-panel')">
-                            <div class="sb-nav-link-icon"><i class="fas fa-book"></i></div>
-                            Reservations
+                        <button class="nav-link bg-dark" onclick="">
+                            <div class="sb-nav-link-icon"><i class="fas fa-receipt"></i></div>
+                            Nguyên liệu sử dụng 
                         </button>
-                        <button class="nav-link bg-dark" onclick="getPanel('customer-panel')">
-                            <div class="sb-nav-link-icon"><i class="fas fa-person-shelter"></i></div>
-                            Members
-                        </button>
-                        <button class="nav-link bg-dark" onclick="getPanel('staff-panel')">
-                            <div class="sb-nav-link-icon"><i class="fas fa-people-group"></i></div>
-                            Staff
-                        </button>
-                        <button class="nav-link bg-dark" onclick="getPanel('account-panel')">
-                            <div class="sb-nav-link-icon"><i class="fas fa-eye"></i></div>
-                            View All Accounts
-                        </button>
-                        <button class="nav-link bg-dark" onclick="getPanel('kitchen-panel')">
-                            <div class="sb-nav-link-icon"><i class="fas fa-kitchen-set"></i></div>
-                            Kitchen
-                        </button>
-                        <button class="nav-link bg-dark" onclick="getPanel('admin-panel')">
-                            <div class="sb-nav-link-icon"><i class="fas fa-user-shield"></i></div>
-                            Admin
-                        </button>
-
-                        <div class="sb-sidenav-menu-heading">Report & Analytics</div>
-                        <button class="nav-link bg-dark" onclick="getPanel('sales-panel')">
-                            <div class="sb-nav-link-icon"><i class="fas fa-fire"></i></div>
-                            Items Sales
-                        </button>
-                        <button class="nav-link bg-dark" onclick="getPanel('statistics-panel')">
-                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                            Revenue Statistics
-                        </button>
-                        <button class="nav-link bg-dark" onclick="getPanel('profiles-panel')">
-                            <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
-                            Member Profiles
-                        </button>
+                       
                         <button class="nav-link bg-dark" onclick="getPanel('logout')">
                             <div class="sb-nav-link-icon"><i class="fas fa-key"></i></div>
                             Log out
