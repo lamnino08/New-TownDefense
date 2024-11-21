@@ -1,8 +1,0 @@
-{% extends 'base.html' %}
-{% block content %}
-<h1>Chi tiết hóa đơn</h1>
-<p>Mã hóa đơn: {{ bill.bill_id }}</p>
-<p>Bàn: {{ bill.table.table_number }}</p>
-<p>Tổng tiền: {{ bill.total_price }}</p>
-<p>Đã thanh toán: {{ bill.is_payed }}</p>
-{% endblock %}

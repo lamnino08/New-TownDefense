@@ -1,8 +1,0 @@
-{% extends 'base.html' %}
-{% block content %}
-<h1>Chi tiết món ăn</h1>
-<p>Tên món: {{ menu.name }}</p>
-<p>Mô tả: {{ menu.description }}</p>
-<p>Giá: {{ menu.price }}</p>
-<p>Trạng thái: {{ 'Có sẵn' if menu.is_available else 'Hết hàng' }}</p>
-{% endblock %}
