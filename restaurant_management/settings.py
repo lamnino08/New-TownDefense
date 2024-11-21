@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     'auth_service',
+    'hr_service',
 ]
 
 AUTH_USER_MODEL = 'auth_service.CustomUser'
@@ -91,7 +92,7 @@ WSGI_APPLICATION = 'restaurant_management.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'restaurant',
+        'NAME': 'restaurant1',
         'USER': 'root',
         'PASSWORD': '',  
         'HOST': 'localhost',
@@ -139,3 +140,5 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+

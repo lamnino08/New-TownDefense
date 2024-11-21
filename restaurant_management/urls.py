@@ -21,5 +21,6 @@ from django.urls import path, include
 urlpatterns = [
     path('auth/', include('auth_service.urls')),
     path('hr/', include('hr_service.urls')),
+    
 ]
 
