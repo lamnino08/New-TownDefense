@@ -47,13 +47,13 @@
                     {% elif user.is_active%}
                         {{form.render}}
                     {% else %}
-                        <p><a href="{% url 'login' %}">Login to Buy</a> </p>
+                        <p><a href="{% url 'login' %}">Đăng nhập</a> </p>
                     {% endif %}
                     {% else %}
-                        <p class="text-danger">Not Available for delivery!</p>
+                        <p class="text-danger">Không có sẵn!</p>
                     {% endif %}
 
-                    <a href="/dishes/?q={{dish.category.id}}">More Dishes under {{dish.category.name}}</a>
+                    <a href="/dishes/?q={{dish.category.id}}">Thêm món ăn dưới {{dish.category.name}}</a>
                 </div>
             </div>
         </div>
