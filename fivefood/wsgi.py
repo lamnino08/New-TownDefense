@@ -1,5 +1,9 @@
 """
+<<<<<<< HEAD
 WSGI config for foodzone project.
+=======
+WSGI config for fivefood project.
+>>>>>>> main
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
