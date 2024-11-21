@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'myapp',
     'paypal.standard.ipn',
+    'hr_service',
 ]
 
 MIDDLEWARE = [
@@ -126,3 +127,6 @@ PAYPAL_RECEIVER_EMAIL = 'sts.amandeepkaur@gmail.com'
 PAYPAL_TEST = True
 
 HOST = '127.0.0.1:8000'
+
+AUTH_USER_MODEL = 'hr_service.CustomUser'
+
