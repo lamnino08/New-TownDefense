@@ -1,0 +1,21 @@
+<!-- templates/admin/myapp/bill_detail.html -->
+{% extends 'admin/base_site.html' %}
+
+{% block content %}
+<h1>Chi tiết Hóa đơn #{{ bill.id }}</h1>
+
+<p><strong>Bàn:</strong> {{ bill.table.name }}</p>
+<p><strong>Khách hàng:</strong> {{ bill.customer.user.first_name }} {{ bill.customer.user.last_name }}</p>
+<p><strong>Tổng tiền:</strong> {{ bill.total_price }}</p>
+<p><strong>Trạng thái thanh toán:</strong> {% if bill.is_payed %} Đã thanh toán {% else %} Chưa thanh toán {% endif %}</p>
+<p><strong>Thời gian:</strong> {{ bill.time }}</p>
+
+<h3>Món ăn trong hóa đơn:</h3>
+<ul>
+    {% for bill_dish in bill.billdish_set.all %}
+        <li>{{ bill_dish.dish.name }} - {{ bill_dish.quantity }} x {{ bill_dish.dish.price }}</li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'admin:myapp_bill_change' bill.id %}">Quay lại trang chỉnh sửa hóa đơn</a>
+{% endblock %}

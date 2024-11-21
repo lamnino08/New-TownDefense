@@ -83,3 +83,43 @@ class Order(models.Model):
 
     class Meta:
         verbose_name_plural = "Order Table"
+
+class Table(models.Model):
+    name = models.CharField(max_length=50, unique=True)  # Tên bàn (VD: "Bàn 1")
+    is_occupied = models.BooleanField(default=False)  # Trạng thái bàn (có khách hay không)
+    current_bill = models.OneToOneField(
+        'Bill', on_delete=models.SET_NULL, null=True, blank=True, related_name='table_bill'
+    )  # Hóa đơn hiện tại liên kết với bàn
+
+    def __str__(self):
+        return self.name
+
+    def get_current_unpaid_bill(self):
+        """
+        Lấy hóa đơn chưa thanh toán mới nhất của bàn.
+        Trả về hóa đơn nếu có, nếu không có trả về None.
+        """
+        return self.bills.filter(is_payed=False).order_by('-time').first()  # Sắp xếp theo thời gian mới nhất
+
+    class Meta:
+        verbose_name_plural = "Danh sách bàn"
+
+class Bill(models.Model):
+    table = models.ForeignKey(Table, on_delete=models.SET_NULL, null=True, related_name='bills')
+    customer = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True, blank=True)  # Thêm null=True nếu cần thiết
+    dishes = models.ManyToManyField(Dish, through='BillDish')  # Liên kết món ăn
+    total_price = models.FloatField(null=True)
+    is_payed = models.BooleanField(default=False)
+    time = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Bill {self.id} - Table: {self.table.name}"
+
+class BillDish(models.Model):
+    bill = models.ForeignKey(Bill, on_delete=models.CASCADE)  # Liên kết với Bill
+    dish = models.ForeignKey(Dish, on_delete=models.CASCADE)  # Liên kết với Dish
+    note = models.TextField(blank=True, null=True)
+    quantity = models.IntegerField(default=1)  # Số lượng món ăn
+
+    def __str__(self):
+        return f"{self.dish.name} x {self.quantity} (Bill #{self.bill.id})"
