@@ -13,3 +13,4 @@ sqlparse @ file:///tmp/build/80754af9/sqlparse_1602184451250/work
 typing-extensions @ file:///tmp/build/80754af9/typing_extensions_1624965014186/work
 urllib3==1.26.6
 wincertstore==0.2
+django-paypal
