@@ -220,48 +220,39 @@ def payment_cancel(request):
 
 @login_required
 def book_table(request):
-    try:
-        user_profile = Profile.objects.get(user=request.user)
-    except Profile.DoesNotExist:
-        # Tạo Profile mới nếu không tồn tại
-        user_profile = Profile.objects.create(user=request.user)
+    # Lấy danh sách bàn của người dùng hiện tại
+    my_tables = Table.objects.filter(current_bill__customer__user=request.user)
+
+    # Lấy danh sách bàn trống
+    available_tables = Table.objects.filter(is_occupied=False)
 
     if request.method == "POST":
         table_id = request.POST.get("table_id")
-        time = request.POST.get("time")
+        table = get_object_or_404(Table, id=table_id)
 
-        try:
-            table = Table.objects.get(id=table_id, is_occupied=False)
-
-            # Tạo Bill mới cho bàn
+        # Kiểm tra nếu bàn đã được đặt
+        if table.is_occupied:
+            messages.error(request, "Bàn này đã được đặt.")
+        else:
+            # Đặt bàn
             bill = Bill.objects.create(
                 table=table,
-                customer=user_profile,
+                customer=request.user.profile,  # Lấy khách hàng từ profile người dùng
                 total_price=0,
                 is_payed=False,
-                time=time,
+                time=datetime.now()
             )
-
-            # Cập nhật trạng thái bàn
             table.is_occupied = True
             table.current_bill = bill
             table.save()
-
-            messages.success(request, f"Bạn đã đặt bàn {
-                             table.name} thành công!")
-        except Table.DoesNotExist:
-            messages.error(request, "Bàn không hợp lệ hoặc đã được đặt!")
+            messages.success(request, f"Đã đặt bàn {table.name} thành công!")
 
         return redirect("book_table")
 
-    my_tables = Table.objects.filter(current_bill__customer=user_profile)
-    available_tables = Table.objects.filter(is_occupied=False)
-
-    return render(
-        request,
-        "book_table.html",
-        {"my_tables": my_tables, "available_tables": available_tables},
-    )
+    return render(request, "book_table.html", {
+        "my_tables": my_tables,
+        "available_tables": available_tables
+    })
 
 
 @login_required

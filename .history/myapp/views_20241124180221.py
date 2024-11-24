@@ -1,13 +1,13 @@
 from django.shortcuts import render, get_object_or_404, reverse, redirect
-from myapp.models import Contact, Dish, Team, Category, Profile, Order, Table
+from myapp.models import Contact, Dish, Team, Category, Profile, Order
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, logout
 from paypal.standard.forms import PayPalPaymentsForm
 from django.conf import settings
 import paypalrestsdk
+from myapp.models import Table
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 
 
 def index(request):
@@ -218,74 +218,29 @@ def payment_cancel(request):
     return render(request, 'payment_failed.html')
 
 
-@login_required
 def book_table(request):
-    try:
-        user_profile = Profile.objects.get(user=request.user)
-    except Profile.DoesNotExist:
-        # Tạo Profile mới nếu không tồn tại
-        user_profile = Profile.objects.create(user=request.user)
+    if request.method == 'POST':
+        table_id = request.POST.get('table_id')
+        name = request.POST.get('name')
+        phone = request.POST.get('phone')
+        guests = request.POST.get('guests')
+        date = request.POST.get('date')
+        time = request.POST.get('time')
 
-    if request.method == "POST":
-        table_id = request.POST.get("table_id")
-        time = request.POST.get("time")
-
-        try:
-            table = Table.objects.get(id=table_id, is_occupied=False)
-
-            # Tạo Bill mới cho bàn
-            bill = Bill.objects.create(
-                table=table,
-                customer=user_profile,
-                total_price=0,
-                is_payed=False,
-                time=time,
-            )
-
-            # Cập nhật trạng thái bàn
+        # Kiểm tra bàn có khả dụng không
+        table = Table.objects.filter(id=table_id, is_occupied=False).first()
+        if table:
             table.is_occupied = True
-            table.current_bill = bill
             table.save()
 
-            messages.success(request, f"Bạn đã đặt bàn {
-                             table.name} thành công!")
-        except Table.DoesNotExist:
-            messages.error(request, "Bàn không hợp lệ hoặc đã được đặt!")
+            # Lưu thông tin đặt bàn
+            # Thêm xử lý lưu thông tin vào model nếu cần
+            messages.success(
+                request, f"Bàn {table.name} đã được đặt thành công!")
+            return redirect('index')
+        else:
+            messages.error(request, "Bàn không khả dụng.")
+            return redirect('book_table')
 
-        return redirect("book_table")
-
-    my_tables = Table.objects.filter(current_bill__customer=user_profile)
-    available_tables = Table.objects.filter(is_occupied=False)
-
-    return render(
-        request,
-        "book_table.html",
-        {"my_tables": my_tables, "available_tables": available_tables},
-    )
-
-
-@login_required
-def edit_table(request, table_id):
-    # Chỉnh sửa hóa đơn/bàn nếu cần
-    table = get_object_or_404(
-        Table, id=table_id, current_bill__customer__user=request.user)
-    if request.method == "POST":
-        # Logic cập nhật nếu có form chỉnh sửa
-        messages.success(request, f"Đã cập nhật bàn {table.name} thành công!")
-        return redirect("book_table")
-    return render(request, "edit_table.html", {"table": table})
-
-
-@login_required
-def delete_table(request, table_id):
-    table = get_object_or_404(
-        Table, id=table_id, current_bill__customer__user=request.user)
-    if request.method == "POST":
-        # Hủy đặt bàn
-        table.is_occupied = False
-        if table.current_bill:
-            table.current_bill.delete()  # Xoá bill liên quan
-        table.current_bill = None
-        table.save()
-        messages.success(request, f"Đã hủy đặt bàn {table.name}.")
-        return redirect("book_table")
+    tables = Table.objects.filter(is_occupied=False)
+    return render(request, 'book_table.html', {'tables': tables})

@@ -1,13 +1,10 @@
-from django.shortcuts import render, get_object_or_404, reverse, redirect
-from myapp.models import Contact, Dish, Team, Category, Profile, Order, Table
-from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404, reverse
+from myapp.models import Contact, Dish, Team, Category, Profile, Order, Table, Bill, BillDish
+from django.http import JsonResponse, HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, logout
 from paypal.standard.forms import PayPalPaymentsForm
 from django.conf import settings
-import paypalrestsdk
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 
 
 def index(request):
@@ -216,76 +213,3 @@ def payment_cancel(request):
     # Order.objects.get(id=order_id).delete()
 
     return render(request, 'payment_failed.html')
-
-
-@login_required
-def book_table(request):
-    try:
-        user_profile = Profile.objects.get(user=request.user)
-    except Profile.DoesNotExist:
-        # Tạo Profile mới nếu không tồn tại
-        user_profile = Profile.objects.create(user=request.user)
-
-    if request.method == "POST":
-        table_id = request.POST.get("table_id")
-        time = request.POST.get("time")
-
-        try:
-            table = Table.objects.get(id=table_id, is_occupied=False)
-
-            # Tạo Bill mới cho bàn
-            bill = Bill.objects.create(
-                table=table,
-                customer=user_profile,
-                total_price=0,
-                is_payed=False,
-                time=time,
-            )
-
-            # Cập nhật trạng thái bàn
-            table.is_occupied = True
-            table.current_bill = bill
-            table.save()
-
-            messages.success(request, f"Bạn đã đặt bàn {
-                             table.name} thành công!")
-        except Table.DoesNotExist:
-            messages.error(request, "Bàn không hợp lệ hoặc đã được đặt!")
-
-        return redirect("book_table")
-
-    my_tables = Table.objects.filter(current_bill__customer=user_profile)
-    available_tables = Table.objects.filter(is_occupied=False)
-
-    return render(
-        request,
-        "book_table.html",
-        {"my_tables": my_tables, "available_tables": available_tables},
-    )
-
-
-@login_required
-def edit_table(request, table_id):
-    # Chỉnh sửa hóa đơn/bàn nếu cần
-    table = get_object_or_404(
-        Table, id=table_id, current_bill__customer__user=request.user)
-    if request.method == "POST":
-        # Logic cập nhật nếu có form chỉnh sửa
-        messages.success(request, f"Đã cập nhật bàn {table.name} thành công!")
-        return redirect("book_table")
-    return render(request, "edit_table.html", {"table": table})
-
-
-@login_required
-def delete_table(request, table_id):
-    table = get_object_or_404(
-        Table, id=table_id, current_bill__customer__user=request.user)
-    if request.method == "POST":
-        # Hủy đặt bàn
-        table.is_occupied = False
-        if table.current_bill:
-            table.current_bill.delete()  # Xoá bill liên quan
-        table.current_bill = None
-        table.save()
-        messages.success(request, f"Đã hủy đặt bàn {table.name}.")
-        return redirect("book_table")

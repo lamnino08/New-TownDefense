@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- Page Header Start -->
+<div class="page-header mb-0">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <h2>{% if dish_category %} {{dish_category}} {% else %}Dishes {% endif %}({{dishes|length}})</h2>
+      </div>
+      <div class="col-12">
+        <a href="/">Home</a>
+        <a href="/dishes">Món ăn</a>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Page Header End -->
+
+<div class="container">
+  <h1>Đặt Bàn</h1>
+  <form method="POST">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="table_id">Chọn bàn:</label>
+      <select class="form-control" id="table_id" name="table_id">
+        {% for table in tables %}
+        <option value="{{ table.id }}">{{ table.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="name">Tên khách hàng:</label>
+      <input type="text" class="form-control" id="name" name="name" required>
+    </div>
+    <div class="form-group">
+      <label for="phone">Số điện thoại:</label>
+      <input type="text" class="form-control" id="phone" name="phone" required>
+    </div>
+    <div class="form-group">
+      <label for="guests">Số khách:</label>
+      <input type="number" class="form-control" id="guests" name="guests" required>
+    </div>
+    <div class="form-group">
+      <label for="date">Ngày:</label>
+      <input type="date" class="form-control" id="date" name="date" required>
+    </div>
+    <div class="form-group">
+      <label for="time">Giờ:</label>
+      <input type="time" class="form-control" id="time" name="time" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Đặt Bàn</button>
+  </form>
+</div>
+{% endblock %}

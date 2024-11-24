@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib import admin
-from .models import Bill, Order, Profile
+from .models import Bill, Order, Profile, BillDish
 
 
 class OrderForm(forms.ModelForm):
@@ -17,9 +17,13 @@ class BillForm(forms.ModelForm):
         model = Bill
         fields = ['table', 'customer', 'dishes']
 
-    # Nếu có tham số `table` trong URL, gán giá trị đó vào field `table`
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Kiểm tra nếu có 'table' trong request
         if 'table' in kwargs.get('initial', {}):
             self.fields['table'].initial = kwargs.get('initial').get('table')
+
+
+class BillDishForm(forms.ModelForm):
+    class Meta:
+        model = BillDish
+        fields = ['bill', 'dish', 'quantity', 'note']

@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- Page Header Start -->
+<div class="page-header mb-0">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <h2>{% if dish_category %} {{dish_category}} {% else %}Dishes {% endif %}({{dishes|length}})</h2>
+      </div>
+      <div class="col-12">
+        <a href="/">Home</a>
+        <a href="/dishes">Món ăn</a>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Page Header End -->
+
+<div class="container mt-5">
+  <h2>Đặt bàn</h2>
+
+  {% if error_message %}
+  <div class="alert alert-danger">{{ error_message }}</div>
+  {% endif %}
+
+  {% if success_message %}
+  <div class="alert alert-success">{{ success_message }}</div>
+  <a href="{% url 'book_table' %}" class="btn btn-primary mt-3">Đặt thêm bàn</a>
+  {% endif %}
+
+  <div class="row">
+    {% for table in tables %}
+    <div class="col-md-4 mb-3">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Bàn: {{ table.name }}</h5>
+          <p>Trạng thái:
+            {% if table.is_occupied %}
+            <span class="text-danger">Đã được đặt</span>
+            {% else %}
+            <span class="text-success">Trống</span>
+            {% endif %}
+          </p>
+          {% if not table.is_occupied %}
+          <form method="post" action="">
+            {% csrf_token %}
+            <input type="hidden" name="table_id" value="{{ table.id }}">
+            <button type="submit" class="btn btn-primary">Đặt bàn</button>
+          </form>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

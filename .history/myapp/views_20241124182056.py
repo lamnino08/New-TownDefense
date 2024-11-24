@@ -220,11 +220,7 @@ def payment_cancel(request):
 
 @login_required
 def book_table(request):
-    try:
-        user_profile = Profile.objects.get(user=request.user)
-    except Profile.DoesNotExist:
-        # Tạo Profile mới nếu không tồn tại
-        user_profile = Profile.objects.create(user=request.user)
+    user_profile = Profile.objects.get(user=request.user)
 
     if request.method == "POST":
         table_id = request.POST.get("table_id")

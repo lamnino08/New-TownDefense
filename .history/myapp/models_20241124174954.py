@@ -116,6 +116,28 @@ class Table(models.Model):
         verbose_name_plural = "Danh sách bàn"
 
 
+class TableAdmin(admin.ModelAdmin):
+    list_display = ['name', 'is_occupied', 'current_bill_display']
+    list_filter = ['is_occupied']
+    search_fields = ['name']
+
+    def current_bill_display(self, obj):
+        """
+        Hiển thị hóa đơn hiện tại (nếu có) hoặc tạo hóa đơn mới.
+        """
+        if obj.current_bill:
+            return format_html(
+                '<a href="/admin/myapp/bill/{}/change/">Hóa đơn #{}</a>',
+                obj.current_bill.id,
+                obj.current_bill.id
+            )
+        return format_html(
+            '<a href="/admin/myapp/bill/add/?table={}">Tạo hóa đơn mới</a>',
+            obj.id
+        )
+    current_bill_display.short_description = "Hóa đơn hiện tại"
+
+
 class Bill(models.Model):
     table = models.ForeignKey(
         Table, on_delete=models.SET_NULL, null=True, related_name='bills')

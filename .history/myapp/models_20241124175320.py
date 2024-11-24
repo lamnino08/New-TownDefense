@@ -119,17 +119,21 @@ class Table(models.Model):
 class Bill(models.Model):
     table = models.ForeignKey(
         Table, on_delete=models.SET_NULL, null=True, related_name='bills')
-    # Thêm null=True nếu cần thiết
     customer = models.ForeignKey(
         Profile, on_delete=models.CASCADE, null=True, blank=True)
-    dishes = models.ManyToManyField(
-        Dish, through='BillDish')  # Liên kết món ăn
+    dishes = models.ManyToManyField(Dish, through='BillDish')
     total_price = models.FloatField(null=True)
     is_payed = models.BooleanField(default=False)
     time = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f"Bill {self.id} - Table: {self.table.name}"
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        # Cập nhật trạng thái bàn
+        if self.is_payed:
+            self.table.is_occupied = False
+        else:
+            self.table.is_occupied = True
+        self.table.save()
 
 
 class BillDish(models.Model):

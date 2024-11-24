@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- Page Header Start -->
+<div class="page-header mb-0">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <h2>{% if dish_category %} {{dish_category}} {% else %}Dishes {% endif %}({{dishes|length}})</h2>
+      </div>
+      <div class="col-12">
+        <a href="/">Home</a>
+        <a href="/dishes">Món ăn</a>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Page Header End -->
+
+<div class="container mt-5">
+
+  {% if success_message %}
+  <div class="alert alert-success">{{ success_message }}</div>
+  {% endif %}
+  {% if error_message %}
+  <div class="alert alert-danger">{{ error_message }}</div>
+  {% endif %}
+
+  <!-- Bàn đã đặt -->
+  <h3>Bàn đã đặt của tôi</h3>
+  <div class="row">
+    {% if my_tables %}
+    {% for table in my_tables %}
+    <div class="col-md-4 mb-3">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Bàn: {{ table.name }}</h5>
+          <p>Ngày đặt: {{ table.current_bill.time }}</p>
+          <p>Trạng thái: <span class="text-danger">Đã đặt</span></p>
+          <!-- Nút chỉnh sửa -->
+          <a href="{% url 'edit_table' table.id %}" class="btn btn-warning">Chỉnh sửa</a>
+          <!-- Nút xoá -->
+          <form method="post" action="{% url 'delete_table' table.id %}" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Xoá</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="col-12">
+      <p>Bạn chưa đặt bàn nào.</p>
+      <button class="btn btn-primary" data-toggle="modal" data-target="#newTableModal">Đặt bàn mới</button>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Modal Form Đặt Bàn -->
+  <div class="modal fade" id="newTableModal" tabindex="-1" role="dialog" aria-labelledby="newTableModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <form method="post" action="">
+          {% csrf_token %}
+          <div class="modal-header">
+            <h5 class="modal-title" id="newTableModalLabel">Đặt Bàn Mới</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="table">Chọn bàn:</label>
+              <select name="table_id" id="table" class="form-control" required>
+                {% for table in available_tables %}
+                <option value="{{ table.id }}">{{ table.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="time">Ngày & giờ:</label>
+              <input type="datetime-local" name="time" id="time" class="form-control" required>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Đặt bàn</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

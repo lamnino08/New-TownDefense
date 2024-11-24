@@ -1,9 +1,9 @@
 
 from pathlib import Path
-import os
+import os 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-TEMPLATE_DIR = os.path.join(BASE_DIR, 'template')
+TEMPLATE_DIR = os.path.join(BASE_DIR,'template')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -109,9 +109,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_DIR = os.path.join(BASE_DIR, 'static')
+STATIC_DIR = os.path.join(BASE_DIR,'static')
 
-STATICFILES_DIRS = [
+STATICFILES_DIRS = [ 
     STATIC_DIR,
 ]
 # Default primary key field type
@@ -120,10 +120,9 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_ROOT = os.path.join(BASE_DIR,"media")
 
 PAYPAL_RECEIVER_EMAIL = 'sts.amandeepkaur@gmail.com'
 PAYPAL_TEST = True
 
 HOST = '127.0.0.1:8000'
-LOGIN_URL = '/login/'

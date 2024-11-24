@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.html import format_html
 from django.contrib.auth.models import User
 
 # Create your models here.
@@ -114,6 +115,28 @@ class Table(models.Model):
 
     class Meta:
         verbose_name_plural = "Danh sách bàn"
+
+
+class TableAdmin(admin.ModelAdmin):
+    list_display = ['name', 'is_occupied', 'current_bill_display']
+    list_filter = ['is_occupied']
+    search_fields = ['name']
+
+    def current_bill_display(self, obj):
+        """
+        Hiển thị hóa đơn hiện tại (nếu có) hoặc tạo hóa đơn mới.
+        """
+        if obj.current_bill:
+            return format_html(
+                '<a href="/admin/myapp/bill/{}/change/">Hóa đơn #{}</a>',
+                obj.current_bill.id,
+                obj.current_bill.id
+            )
+        return format_html(
+            '<a href="/admin/myapp/bill/add/?table={}">Tạo hóa đơn mới</a>',
+            obj.id
+        )
+    current_bill_display.short_description = "Hóa đơn hiện tại"
 
 
 class Bill(models.Model):

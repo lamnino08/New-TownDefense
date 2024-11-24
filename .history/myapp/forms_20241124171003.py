@@ -2,15 +2,12 @@ from django import forms
 from django.contrib import admin
 from .models import Bill, Order, Profile
 
-
 class OrderForm(forms.ModelForm):
-    customer = forms.ModelChoiceField(
-        queryset=Profile.objects.all(), required=True)
+    customer = forms.ModelChoiceField(queryset=Profile.objects.all(), required=True)
 
     class Meta:
         model = Order
         fields = ['customer', 'item', 'invoice_id']
-
 
 class BillForm(forms.ModelForm):
     class Meta:

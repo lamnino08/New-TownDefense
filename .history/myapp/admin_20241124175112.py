@@ -25,58 +25,30 @@ view_dishes_in_table.short_description = "Xem món trong bàn"
 
 class TableAdmin(admin.ModelAdmin):
     list_display = ['name', 'is_occupied', 'current_bill_display']
-    actions = ['create_order_for_table']
+    list_filter = ['is_occupied']
+    search_fields = ['name']
+    actions = ['create_new_bill']
 
     def current_bill_display(self, obj):
-        # Lấy hóa đơn chưa thanh toán mới nhất
-        current_bill = obj.get_current_unpaid_bill()
-        if current_bill:
-            # Tạo liên kết tới trang chi tiết của Bill
+        if obj.current_bill:
             return format_html(
-                '<a href="/admin/myapp/bill/{}/">Bill #{}</a> - {}',
-                current_bill.id,  # Đường dẫn tới trang chi tiết Bill
-                current_bill.id,
-                current_bill.time.strftime('%Y-%m-%d %H:%M:%S')
+                '<a href="/admin/myapp/bill/{}/change/">Hóa đơn #{}</a>',
+                obj.current_bill.id,
+                obj.current_bill.id
             )
-        else:
-            # Nếu không có hóa đơn chưa thanh toán, tạo liên kết để tạo mới Bill
-            return format_html(
-                '<a href="{}">Tạo Bill mới</a>',
-                # Đường dẫn tới trang tạo Bill mới
-                f'/admin/myapp/bill/add/?table={obj.id}'
-            )
-        return "Chưa có hóa đơn chưa thanh toán"
-    current_bill_display.short_description = "Hóa đơn chưa thanh toán"
+        return format_html(
+            '<a href="/admin/myapp/bill/add/?table={}">Tạo hóa đơn mới</a>',
+            obj.id
+        )
+    current_bill_display.short_description = "Hóa đơn hiện tại"
 
-    def create_order_for_table(self, request, queryset):
+    def create_new_bill(self, request, queryset):
         for table in queryset:
-            # Kiểm tra xem bàn có hóa đơn chưa thanh toán hay không
-            current_bill = table.get_current_unpaid_bill()
-
-            if not current_bill:
-                # Nếu không có hóa đơn chưa thanh toán, tạo một hóa đơn mới
-                bill = Bill.objects.create(
-                    table=table,
-                    total_price=0,  # Có thể thay đổi theo yêu cầu
-                    is_payed=False,
-                )
-                order = Order.objects.create(
-                    customer=None,  # Bạn có thể yêu cầu nhập tên khách hàng sau
-                    item=None,  # Bạn có thể thêm món ăn nếu cần
-                    status=False,
-                    invoice_id=f"INV{bill.id}",  # Tạo invoice id từ bill
-                )
-
-                # Thêm thông báo
-                self.message_user(
-                    request, f"Order và Bill đã được tạo cho bàn {table.name}")
-            else:
-                self.message_user(
-                    request, f"Bàn {table.name} đã có hóa đơn chưa thanh toán.")
-
-        return HttpResponseRedirect("/admin/myapp/bill/")
-
-    create_order_for_table.short_description = "Tạo Order cho Bàn (nếu chưa có Bill)"
+            if not table.current_bill:
+                Bill.objects.create(table=table, total_price=0, is_payed=False)
+        self.message_user(
+            request, f"{queryset.count()} hóa đơn mới đã được tạo.")
+    create_new_bill.short_description = "Tạo hóa đơn mới"
 
 
 class ContactAdmin(admin.ModelAdmin):
