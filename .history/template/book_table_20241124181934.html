@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- Page Header Start -->
+<div class="page-header mb-0">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <h2>{% if dish_category %} {{dish_category}} {% else %}Dishes {% endif %}({{dishes|length}})</h2>
+      </div>
+      <div class="col-12">
+        <a href="/">Home</a>
+        <a href="/dishes">Món ăn</a>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Page Header End -->
+
+<div class="container mt-5">
+  <h2>Quản lý bàn</h2>
+
+  {% if success_message %}
+  <div class="alert alert-success">{{ success_message }}</div>
+  {% endif %}
+  {% if error_message %}
+  <div class="alert alert-danger">{{ error_message }}</div>
+  {% endif %}
+
+  <!-- Bàn đã đặt -->
+  <h3>Bàn đã đặt của tôi</h3>
+  <div class="row">
+    {% if my_tables %}
+    {% for table in my_tables %}
+    <div class="col-md-4 mb-3">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Bàn: {{ table.name }}</h5>
+          <p>Ngày đặt: {{ table.current_bill.time }}</p>
+          <p>Trạng thái: <span class="text-danger">Đã đặt</span></p>
+          <!-- Nút chỉnh sửa -->
+          <a href="{% url 'edit_table' table.id %}" class="btn btn-warning">Chỉnh sửa</a>
+          <!-- Nút xoá -->
+          <form method="post" action="{% url 'delete_table' table.id %}" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Xoá</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="col-12">
+      <p>Bạn chưa đặt bàn nào.</p>
+      <a href="#available-tables" class="btn btn-primary">Đặt bàn mới</a>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Bàn trống -->
+  <h3 id="available-tables" class="mt-5">Bàn trống</h3>
+  <div class="row">
+    {% for table in available_tables %}
+    <div class="col-md-4 mb-3">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Bàn: {{ table.name }}</h5>
+          <p>Trạng thái: <span class="text-success">Trống</span></p>
+          <!-- Nút đặt bàn -->
+          <form method="post" action="">
+            {% csrf_token %}
+            <input type="hidden" name="table_id" value="{{ table.id }}">
+            <button type="submit" class="btn btn-primary">Đặt bàn</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
