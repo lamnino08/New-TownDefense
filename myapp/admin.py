@@ -121,7 +121,12 @@ class BillAdmin(admin.ModelAdmin):
         bill = get_object_or_404(Bill, id=bill_id)
 
         # Trả về trang chi tiết Bill trong Admin
-        return render(request, 'admin/myapp/bill_detail.html', {'bill': bill})
+        context = {
+            **self.admin_site.each_context(request),  # Thêm các thành phần như sidebar, breadcrumbs
+            'bill': bill,
+            'title': f"Chi tiết Hóa đơn #{bill.id}",
+        }
+        return render(request, 'admin/myapp/bill_detail.html', context)
 
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
