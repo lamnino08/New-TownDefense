@@ -35,21 +35,6 @@
                     </div>
                 </div>
             </div>
-            <div class="carousel-item">
-                <div class="carousel-img">
-                    <img src="/static/img/datban.jpg" alt="Image">
-                </div>
-                <div class="carousel-text">
-                    <h1>Đặt <span>Bàn</span></h1>
-                    <p>
-                        Để trải nghiệm ẩm thực tuyệt vời của chúng tôi, vui lòng đặt bàn trước.
-                    </p>
-                    <div class="carousel-btn">
-                        <a class="btn custom-btn" href="/menu/">Menu</a>
-                        <a class="btn custom-btn" href="/book_table/">Đặt Bàn</a>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </div>
@@ -71,7 +56,7 @@
             <div class="col-lg-6">
                 <div class="about-content">
                     <div class="section-header">
-                        <p>Giới Thiệu</p>
+                        <p>Về Chúng Tôi</p>
                         <h2>Nấu ăn từ năm 2015</h2>
                     </div>
                     <div class="about-text">
@@ -94,6 +79,20 @@
     </div>
 </div>
 <!-- About Section End -->
+
+<!-- Menu Section Start -->
+<div class="menu">
+    <div class="container">
+        <div class="section-header text-center">
+            <p>Menu</p>
+            <h2>Thực đơn món ăn ngon</h2>
+        </div>
+        <div class="row" id="menu-container">
+            <!-- Các món ăn sẽ được load qua API -->
+        </div>
+    </div>
+</div>
+<!-- Menu Section End -->
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -122,7 +121,7 @@
     });
 </script>
 
-<!-- Video Modal Start -->
+<!-- Video Modal Start-->
 <div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -159,16 +158,10 @@
                             <div class="col-6">
                                 <img src="/static/img/feature-2.jpg" alt="Image">
                             </div>
-                            <div class="col-6">
-                                <img src="/static/img/feature-3.jpg" alt="Image">
-                            </div>
-                            <div class="col-6">
-                                <img src="/static/img/feature-4.jpg" alt="Image">
-                            </div>
                         </div>
                     </div>
-                    <p>Điều quan trọng là khách hàng phải biết trọng lượng của sản phẩm. Một số sợ bị tra tấn, tác giả
-                        của mùa mang thai đó.</p>
+                    <p>Cam kết đem lại trải nghiệm ẩm thực tốt nhất cho khách hàng với những nguyên liệu tươi ngon và
+                        đội ngũ đầu bếp tài năng.</p>
                     <a class="btn custom-btn" href="/book_table/">Đặt Bàn</a>
                 </div>
             </div>
@@ -182,119 +175,12 @@
                                 thực độc đáo.</p>
                         </div>
                     </div>
-                    <div class="col-sm-6">
-                        <div class="feature-item">
-                            <i class="flaticon-vegetable"></i>
-                            <h3>Thành phần tự nhiên</h3>
-                            <p>Mỗi nguyên liệu đều được chọn lọc kỹ càng, đảm bảo không chỉ tốt cho sức khỏe mà còn mang
-                                đến hương vị đậm đà.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="feature-item">
-                            <i class="flaticon-medal"></i>
-                            <h3>Sản phẩm chất lượng tốt nhất</h3>
-                            <p>Chúng tôi cam kết mang đến trải nghiệm ẩm thực tuyệt vời với sản phẩm chất lượng tốt
-                                nhất.</p>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="feature-item">
-                            <i class="flaticon-meat"></i>
-                            <h3>Rau Củ Tươi & Thịt Tươi</h3>
-                            <p>Chúng tôi tự hào cung cấp rau củ tươi ngon và thịt tươi chất lượng cao, được chọn lọc từ
-                                những nguồn cung cấp uy tín.</p>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 <!-- Feature Section End -->
-
-<!-- Team Section Start -->
-<div class="team">
-    <div class="container">
-        <div class="section-header text-center">
-            <p>Đội ngũ của chúng tôi</p>
-            <h2>Đầu Bếp Tốt Nhất </h2>
-        </div>
-        <div class="row">
-            <div class="col-lg-3 col-md-6">
-                <div class="team-item">
-                    <div class="team-img">
-                        <img src="/static/img/team-1.jpg" alt="Image">
-                        <div class="team-social">
-                            <a href=""><i class="fab fa-twitter"></i></a>
-                            <a href=""><i class="fab fa-facebook-f"></i></a>
-                            <a href=""><i class="fab fa-linkedin-in"></i></a>
-                            <a href=""><i class="fab fa-instagram"></i></a>
-                        </div>
-                    </div>
-                    <div class="team-text">
-                        <h2>Trần Bão</h2>
-                        <p>CEO, Co Founder</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="team-item">
-                    <div class="team-img">
-                        <img src="/static/img/team-2.jpg" alt="Image">
-                        <div class="team-social">
-                            <a href=""><i class="fab fa-twitter"></i></a>
-                            <a href=""><i class="fab fa-facebook-f"></i></a>
-                            <a href=""><i class="fab fa-linkedin-in"></i></a>
-                            <a href=""><i class="fab fa-instagram"></i></a>
-                        </div>
-                    </div>
-                    <div class="team-text">
-                        <h2>Phan Đức Lâm</h2>
-                        <p>Master Chef</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="team-item">
-                    <div class="team-img">
-                        <img src="/static/img/team-3.jpg" alt="Image">
-                        <div class="team-social">
-                            <a href=""><i class="fab fa-twitter"></i></a>
-                            <a href=""><i class="fab fa-facebook-f"></i></a>
-                            <a href=""><i class="fab fa-linkedin-in"></i></a>
-                            <a href=""><i class="fab fa-instagram"></i></a>
-                        </div>
-                    </div>
-                    <div class="team-text">
-                        <h2>Đinh Nhật Nam</h2>
-                        <p>Master Chef</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="team-item">
-                    <div class="team-img">
-                        <img src="/static/img/team-4.jpg" alt="Image">
-                        <div class="team-social">
-                            <a href=""><i class="fab fa-twitter"></i></a>
-                            <a href=""><i class="fab fa-facebook-f"></i></a>
-                            <a href=""><i class="fab fa-linkedin-in"></i></a>
-                            <a href=""><i class="fab fa-instagram"></i></a>
-                        </div>
-                    </div>
-                    <div class="team-text">
-                        <h2>Nhật Trường</h2>
-                        <p>Master Chef</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Team Section End -->
 
 <!-- Testimonials Start -->
 <div class="testimonial">

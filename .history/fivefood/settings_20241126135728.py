@@ -28,7 +28,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'myapp',
     'paypal.standard.ipn',
-    'inventory',
     'rest_framework',
 ]
 

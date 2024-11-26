@@ -1,21 +1,5 @@
 {% extends "base.html" %}
 {% block content %}
-<!-- Page Header Start -->
-<div class="page-header mb-0">
-  <div class="container">
-    <div class="row">
-      <div class="col-12">
-        <h2>{% if dish_category %} {{dish_category}} {% else %}Dishes {% endif %}({{dishes|length}})</h2>
-      </div>
-      <div class="col-12">
-        <a href="/">Home</a>
-        <a href="/dishes">Món ăn</a>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Page Header End -->
-
 <div class="container mt-5">
   <h3 class="mb-4">Danh sách bàn</h3>
   <div id="my-tables-container" class="row">

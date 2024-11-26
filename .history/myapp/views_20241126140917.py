@@ -8,11 +8,6 @@ from django.conf import settings
 import paypalrestsdk
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from rest_framework import viewsets, status
-from rest_framework.response import Response
-from .serializers import DishSerializer, CategorySerializer, TableSerializer
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import api_view, permission_classes
 
 
 def index(request):
@@ -332,17 +327,3 @@ class TableViewSet(viewsets.ViewSet):
             return Response({'message': f'Bạn đã đặt bàn {table.name} thành công.'}, status=status.HTTP_201_CREATED)
         except Table.DoesNotExist:
             return Response({'error': 'Bàn không khả dụng hoặc đã được đặt.'}, status=status.HTTP_400_BAD_REQUEST)
-
-
-def menu(request):
-    categories = Category.objects.all()
-    menu = [
-        {
-            "cat_id": category.id,
-            "cat_name": category.name,
-            "cat_img": category.image.url if category.image else '',
-            "items": Dish.objects.filter(category=category, is_available=True).values()
-        }
-        for category in categories
-    ]
-    return render(request, 'menu.html', {"menu": menu, "categories": categories})
