@@ -55,24 +55,30 @@ class StockOut(models.Model):
         verbose_name_plural = "Stock Out Records"
 
 
-# Model cho Phiếu nhập hàng
+from django.db import models
+from django.contrib.auth import get_user_model
+
+
 class PurchaseOrder(models.Model):
-    order_code = models.CharField(max_length=50, primary_key=True)  # Mã phiếu nhập
-    order_date = models.DateField()  # Ngày nhập phiếu
-    
-    is_received = models.BooleanField(default=False)  # Trạng thái nhận hàng (chưa nhận, đã nhận)
-    time = models.DateTimeField(auto_now_add=True)  # Thời gian tạo phiếu
-    
-  
-    def __str__(self):
-        return f"Purchase Order {self.order_code} - Date: {self.order_date}"
+    order_number = models.CharField(max_length=100,default='DEFAULT_ORDER')
+    supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE, null= True)
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_received = models.BooleanField(default=False)
 
-# Model cho chi tiết phiếu nhập
+    def __str__(self):
+        return self.order_number
+
 class PurchaseOrderDetail(models.Model):
-    purchase_order = models.ForeignKey(PurchaseOrder, on_delete=models.CASCADE)  # Liên kết với PurchaseOrder
-    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)  # Liên kết với Ingredient
-    quantity = models.PositiveIntegerField(default=1)  # Số lượng
-   
-
+    purchase_order = models.ForeignKey(PurchaseOrder, on_delete=models.CASCADE)
+    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+    unit_price = models.DecimalField(max_digits=10, decimal_places=2,null=True)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, null= True)
     def __str__(self):
-        return f"{self.ingredient.name} x {self.quantity} (Purchase Order #{self.purchase_order.ord})"
+        return f'{self.ingredient} - {self.quantity}'
+
+    def save(self, *args, **kwargs):
+        # Tính lại thành tiền mỗi khi lưu
+        self.total_price = self.quantity * self.unit_price
+        super().save(*args, **kwargs)
