@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, reverse, redirect
-from myapp.models import Contact, Dish, Team, Category, Profile, Order, Table, Bill
+from myapp.models import Contact, Dish, Team, Category, Profile, Order, Table
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, logout
@@ -13,11 +13,6 @@ from rest_framework.response import Response
 from .serializers import DishSerializer, CategorySerializer, TableSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
-from django.contrib.auth.decorators import login_required
-import json
 
 
 def index(request):
@@ -351,92 +346,3 @@ def menu(request):
         for category in categories
     ]
     return render(request, 'menu.html', {"menu": menu, "categories": categories})
-
-
-@csrf_exempt  # Nếu bạn gặp lỗi CSRF
-@login_required
-def book_table_api(request):
-    if request.method == 'POST':
-        try:
-            # Parse dữ liệu JSON từ request
-            data = json.loads(request.body)
-            table_id = data.get('table_id')
-            time = data.get('time')
-
-            # Kiểm tra bàn
-            table = Table.objects.get(id=table_id)
-
-            if table.is_occupied:
-                return JsonResponse({"success": False, "message": "Bàn đã được đặt trước đó."}, status=400)
-
-            # Lấy thông tin user
-            user_profile = Profile.objects.get(user=request.user)
-
-            # Tạo hóa đơn mới
-            bill = Bill.objects.create(
-                table=table,
-                customer=user_profile,
-                total_price=0,
-                is_payed=False
-            )
-            table.is_occupied = True
-            table.current_bill = bill
-            table.save()
-
-            return JsonResponse({"success": True, "message": "Đặt bàn thành công!"}, status=200)
-
-        except Table.DoesNotExist:
-            return JsonResponse({"success": False, "message": "Không tìm thấy bàn."}, status=404)
-        except Exception as e:
-            return JsonResponse({"success": False, "message": f"Có lỗi xảy ra: {str(e)}"}, status=500)
-    else:
-        return JsonResponse({"success": False, "message": "Chỉ hỗ trợ phương thức POST."}, status=405)
-
-
-@csrf_exempt
-def cancel_table_api(request, table_id):
-    if request.method == 'DELETE':
-        try:
-            table = Table.objects.get(id=table_id)
-            if table.is_occupied:
-                # Xóa hóa đơn hiện tại
-                table.current_bill.delete()
-                table.is_occupied = False
-                table.current_bill = None
-                table.save()
-                return JsonResponse({"success": True, "message": "Hủy đặt bàn thành công!"}, status=200)
-            else:
-                return JsonResponse({"success": False, "message": "Bàn chưa được đặt."}, status=400)
-        except Table.DoesNotExist:
-            return JsonResponse({"success": False, "message": "Không tìm thấy bàn."}, status=404)
-        except Exception as e:
-            return JsonResponse({"success": False, "message": str(e)}, status=500)
-    else:
-        return JsonResponse({"success": False, "message": "Chỉ hỗ trợ phương thức DELETE."}, status=405)
-
-
-@csrf_exempt
-def edit_table_api(request, table_id):
-    if request.method == 'PUT':
-        try:
-            table = Table.objects.get(id=table_id)
-            if not table.is_occupied:
-                return JsonResponse({"success": False, "message": "Bàn chưa được đặt."}, status=400)
-
-            data = json.loads(request.body)
-            new_time = data.get('time')
-            if not new_time:
-                return JsonResponse({"success": False, "message": "Thời gian không hợp lệ."}, status=400)
-
-            # Cập nhật thời gian trong hóa đơn
-            bill = table.current_bill
-            bill.time = new_time
-            bill.save()
-
-            return JsonResponse({"success": True, "message": "Thời gian nhận bàn đã được cập nhật."}, status=200)
-        except Table.DoesNotExist:
-            return JsonResponse({"success": False, "message": "Không tìm thấy bàn."}, status=404)
-        except Exception as e:
-            return JsonResponse({"success": False, "message": str(e)}, status=500)
-    else:
-        return JsonResponse({"success": False, "message": "Chỉ hỗ trợ phương thức PUT."}, status=405)

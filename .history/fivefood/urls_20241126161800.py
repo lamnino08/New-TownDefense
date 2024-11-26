@@ -33,9 +33,4 @@ urlpatterns = [
     path('delete-table/<int:table_id>/',
          views.delete_table, name='delete_table'),
     path('api/', include(router.urls)),
-    path('api/book_table/', views.book_table_api, name='book_table_api'),
-    path('api/cancel_table/<int:table_id>/',
-         views.cancel_table_api, name='cancel_table_api'),
-    path('api/edit_table/<int:table_id>/',
-         views.edit_table_api, name='edit_table_api'),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
