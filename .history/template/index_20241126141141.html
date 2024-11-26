@@ -14,8 +14,7 @@
                         THƯỞNG THỨC ẨM THỰC VỚI NÉT ĐẶC TRƯNG RIÊNG VIỆT NAM
                     </p>
                     <div class="carousel-btn">
-                        <a class="btn custom-btn" href="/menu/">Xem Menu</a>
-                        <a class="btn custom-btn" href="/book_table/">Đặt Bàn</a>
+                        <a class="btn custom-btn" href="">Menu</a>
                     </div>
                 </div>
             </div>
@@ -30,8 +29,8 @@
                         tế và sáng tạo.
                     </p>
                     <div class="carousel-btn">
-                        <a class="btn custom-btn" href="/menu/">Menu</a>
-                        <a class="btn custom-btn" href="/book_table/">Order</a>
+                        <a class="btn custom-btn" href="">Menu</a>
+                        <a class="btn custom-btn" href="">Order</a>
                     </div>
                 </div>
             </div>
@@ -45,8 +44,8 @@
                         Để trải nghiệm ẩm thực tuyệt vời của chúng tôi, vui lòng đặt bàn trước.
                     </p>
                     <div class="carousel-btn">
-                        <a class="btn custom-btn" href="/menu/">Menu</a>
-                        <a class="btn custom-btn" href="/book_table/">Đặt Bàn</a>
+                        <a class="btn custom-btn" href="">Menu</a>
+                        <a class="btn custom-btn" href="">Đặt Bàn</a>
                     </div>
                 </div>
             </div>
@@ -55,7 +54,7 @@
 </div>
 <!-- Carousel End -->
 
-<!-- About Section Start -->
+<!-- About Start -->
 <div class="about">
     <div class="container">
         <div class="row align-items-center">
@@ -71,7 +70,7 @@
             <div class="col-lg-6">
                 <div class="about-content">
                     <div class="section-header">
-                        <p>Giới Thiệu</p>
+                        <p>Về Chúng Tôi</p>
                         <h2>Nấu ăn từ năm 2015</h2>
                     </div>
                     <div class="about-text">
@@ -93,36 +92,10 @@
         </div>
     </div>
 </div>
-<!-- About Section End -->
+<!-- About End -->
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        fetch('/api/dishes/')
-            .then(response => response.json())
-            .then(data => {
-                const container = document.getElementById('menu-container');
-                data.forEach(dish => {
-                    const dishItem = `
-                        <div class="col-md-4">
-                            <div class="menu-item">
-                                <div class="menu-img">
-                                    <img src="${dish.image}" alt="${dish.name}">
-                                </div>
-                                <div class="menu-text">
-                                    <h3>${dish.name} <strong>${dish.price} VND</strong></h3>
-                                    <p>${dish.ingredients}</p>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                    container.innerHTML += dishItem;
-                });
-            })
-            .catch(error => console.error('Error fetching menu:', error));
-    });
-</script>
 
-<!-- Video Modal Start -->
+<!-- Video Modal Start-->
 <div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -131,6 +104,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
+                <!-- 16:9 aspect ratio -->
                 <div class="embed-responsive embed-responsive-16by9">
                     <iframe class="embed-responsive-item" src="" id="video" allowscriptaccess="always"
                         allow="autoplay"></iframe>
@@ -141,13 +115,14 @@
 </div>
 <!-- Video Modal End -->
 
-<!-- Feature Section Start -->
+
+<!-- Feature Start -->
 <div class="feature">
     <div class="container">
         <div class="row">
             <div class="col-lg-5">
                 <div class="section-header">
-                    <p>Hãy Chọn Chúng Tôi</p>
+                    <p>Hãy Chọn Chúng Tôi </p>
                     <h2>Chúng Tôi Có Những</h2>
                 </div>
                 <div class="feature-text">
@@ -167,9 +142,13 @@
                             </div>
                         </div>
                     </div>
-                    <p>Điều quan trọng là khách hàng phải biết trọng lượng của sản phẩm. Một số sợ bị tra tấn, tác giả
-                        của mùa mang thai đó.</p>
-                    <a class="btn custom-btn" href="/book_table/">Đặt Bàn</a>
+                    <p>
+                        Điều quan trọng là khách hàng phải biết trọng lượng của sản phẩm. Phasel thậm chí không phải giá
+                        của tôi. Nó sẽ chăm sóc những thứ dễ trang trí, không phải cáo. Một số sợ bị tra tấn, tác giả
+                        của mùa mang thai đó, phim hoạt hình Tôi là ai. Anh ta sẽ không chăm sóc các cầu thủ và chỉ có
+                        tội ác lớn nhất
+                    </p>
+                    <a class="btn custom-btn" href="">Đặt Bàn </a>
                 </div>
             </div>
             <div class="col-lg-7">
@@ -178,16 +157,20 @@
                         <div class="feature-item">
                             <i class="flaticon-cooking"></i>
                             <h3>Đầu bếp giỏi nhất thế giới</h3>
-                            <p>Với đội ngũ đầu bếp tài năng, chúng tôi cam kết mang đến cho bạn những trải nghiệm ẩm
-                                thực độc đáo.</p>
+                            <p>
+                                Với đội ngũ đầu bếp tài năng, chúng tôi cam kết mang đến cho bạn những trải nghiệm ẩm
+                                thực độc đáo, từ món ăn truyền thống đến những sáng tạo mới lạ
+                            </p>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="feature-item">
                             <i class="flaticon-vegetable"></i>
                             <h3>Thành phần tự nhiên</h3>
-                            <p>Mỗi nguyên liệu đều được chọn lọc kỹ càng, đảm bảo không chỉ tốt cho sức khỏe mà còn mang
-                                đến hương vị đậm đà.</p>
+                            <p>
+                                Mỗi nguyên liệu đều được chọn lọc kỹ càng, từ rau củ đến thịt cá, đảm bảo không chỉ tốt
+                                cho sức khỏe mà còn mang đến hương vị đậm đà.
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -196,16 +179,20 @@
                         <div class="feature-item">
                             <i class="flaticon-medal"></i>
                             <h3>Sản phẩm chất lượng tốt nhất</h3>
-                            <p>Chúng tôi cam kết mang đến trải nghiệm ẩm thực tuyệt vời với sản phẩm chất lượng tốt
-                                nhất.</p>
+                            <p>
+                                Chúng tôi cam kết mang đến trải nghiệm ẩm thực tuyệt vời với sản phẩm chất lượng tốt
+                                nhất, để mỗi bữa ăn đều là một hành trình khám phá hương vị tuyệt vời!
+                            </p>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="feature-item">
                             <i class="flaticon-meat"></i>
                             <h3>Rau Củ Tươi & Thịt Tươi</h3>
-                            <p>Chúng tôi tự hào cung cấp rau củ tươi ngon và thịt tươi chất lượng cao, được chọn lọc từ
-                                những nguồn cung cấp uy tín.</p>
+                            <p>
+                                Chúng tôi tự hào cung cấp rau củ tươi ngon và thịt tươi chất lượng cao, được chọn lọc từ
+                                những nguồn cung cấp uy tín.
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -213,14 +200,95 @@
         </div>
     </div>
 </div>
-<!-- Feature Section End -->
+<!-- Feature End -->
 
-<!-- Team Section Start -->
+
+<!-- Food Start -->
+<div class="food">
+    <div class="container">
+        <div class="row align-items-center">
+            {% for cat in categories %}
+            <div class="col-md-4">
+                <div class="food-item">
+                    <i class="{{cat.icon}}"></i>
+                    <h2>{{cat.name}}</h2>
+                    <p>
+                        {{cat.description}}
+                    </p>
+                    <a href="{% url 'all_dishes' %}?q={{cat.id}}">Xem thêm</a>
+                </div>
+
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<!-- Food End -->
+
+
+<!-- Menu Start -->
+<div class="menu">
+    <div class="container">
+        <div class="section-header text-center">
+            <p>Menu</p>
+            <h2>Thực đơn món ăn ngon</h2>
+        </div>
+        <div class="menu-tab">
+
+            <ul class="nav nav-pills justify-content-center">
+                {% for category in menu %}
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="pill" href="#c-{{category.cat_id}}">{{category.cat_name}}</a>
+                </li>
+                {% endfor %}
+            </ul>
+            <div class="tab-content">
+                {% for category in menu %}
+                <div id="c-{{category.cat_id}}" class="container tab-pane">
+                    <div class="row">
+                        {% if category.items|length == 0 %}
+                        <div class="col-md-12 text-center">
+                            <h3>No Items under {{category.cat_name}} Yet..</h3>
+                        </div>
+                        {% else %}
+                        <div class="col-lg-7 col-md-12">
+                            {% for item in category.items %}
+                            <div class="menu-item">
+                                <div class="menu-img">
+                                    <img src="/media/{{item.image}}" alt="Image">
+                                </div>
+                                <div class="menu-text">
+                                    <h3><span><a href="{% url 'dish' id=item.id %}">{{item.name}}</a></span>
+                                        {% if item.price != item.discounted_price %}
+                                        <strong><del>&dollar;{{item.price}}</del></strong>
+                                        {% endif %}
+                                        <strong>&dollar;{{item.discounted_price}}</strong>
+                                    </h3>
+                                    <p>{{item.ingredients}}</p>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="col-lg-5 d-none d-lg-block">
+                            <img src="/media/{{category.cat_img}}" style="height:100%;width:100%;" alt="Image">
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Menu End -->
+
+
+<!-- Team Start -->
 <div class="team">
     <div class="container">
         <div class="section-header text-center">
             <p>Đội ngũ của chúng tôi</p>
-            <h2>Đầu Bếp Tốt Nhất </h2>
+            <h2>Đầu bếp bậc thầy của chúng tôi</h2>
         </div>
         <div class="row">
             <div class="col-lg-3 col-md-6">
@@ -294,9 +362,10 @@
         </div>
     </div>
 </div>
-<!-- Team Section End -->
+<!-- Team End -->
 
-<!-- Testimonials Start -->
+
+<!-- Testimonial Start -->
 <div class="testimonial">
     <div class="container">
         <div class="owl-carousel testimonials-carousel">
@@ -320,9 +389,28 @@
                 <h2>Bão</h2>
                 <h3>Sinh viên</h3>
             </div>
+            <div class="testimonial-item">
+                <div class="testimonial-img">
+                    <img src="/static/img/testimonial-3.jpg" alt="Image">
+                </div>
+                <p>
+                    Không gian ấm cúng và phục vụ tận tình. Thực đơn phong phú, rất hài lòng!
+                </p>
+                <h2>Bão</h2>
+                <h3>Sinh viên</h3>
+            </div>
+            <div class="testimonial-item">
+                <div class="testimonial-img">
+                    <img src="/static/img/testimonial-4.jpg" alt="Image">
+                </div>
+                <p>
+                    Không gian ấm cúng và phục vụ tận tình. Thực đơn phong phú, rất hài lòng!
+                </p>
+                <h2>Bão</h2>
+                <h3>Sinh viên</h3>
+            </div>
         </div>
     </div>
 </div>
-<!-- Testimonials End -->
-
+<!-- Testimonial End -->
 {% endblock %}

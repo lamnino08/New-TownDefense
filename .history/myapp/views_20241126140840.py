@@ -8,11 +8,6 @@ from django.conf import settings
 import paypalrestsdk
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from rest_framework import viewsets, status
-from rest_framework.response import Response
-from .serializers import DishSerializer, CategorySerializer, TableSerializer
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import api_view, permission_classes
 
 
 def index(request):
@@ -294,55 +289,3 @@ def delete_table(request, table_id):
         table.save()
         messages.success(request, f"Đã hủy đặt bàn {table.name}.")
         return redirect("book_table")
-
-# API cho Dish
-
-
-class DishViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Dish.objects.filter(is_available=True)
-    serializer_class = DishSerializer
-
-# API cho Category
-
-
-class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
-
-# API cho Table (Danh sách bàn và đặt bàn)
-
-
-class TableViewSet(viewsets.ViewSet):
-    permission_classes = [IsAuthenticated]
-
-    def list(self, request):
-        tables = Table.objects.all()
-        serializer = TableSerializer(tables, many=True)
-        return Response(serializer.data)
-
-    def create(self, request):
-        data = request.data
-        user = request.user.profile  # Lấy thông tin khách hàng từ tài khoản đã đăng nhập
-        table_id = data.get('table_id')
-
-        try:
-            table = Table.objects.get(id=table_id, is_occupied=False)
-            table.is_occupied = True
-            table.save()
-            return Response({'message': f'Bạn đã đặt bàn {table.name} thành công.'}, status=status.HTTP_201_CREATED)
-        except Table.DoesNotExist:
-            return Response({'error': 'Bàn không khả dụng hoặc đã được đặt.'}, status=status.HTTP_400_BAD_REQUEST)
-
-
-def menu(request):
-    categories = Category.objects.all()
-    menu = [
-        {
-            "cat_id": category.id,
-            "cat_name": category.name,
-            "cat_img": category.image.url if category.image else '',
-            "items": Dish.objects.filter(category=category, is_available=True).values()
-        }
-        for category in categories
-    ]
-    return render(request, 'menu.html', {"menu": menu, "categories": categories})

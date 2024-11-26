@@ -27,8 +27,7 @@ urlpatterns = [
     path('paypal/', include('paypal.standard.ipn.urls')),
     path('payment_done/', views.payment_done, name='payment_done'),
     path('payment_cancel/', views.payment_cancel, name='payment_cancel'),
-    path('book_table/', views.book_table, name='book_table'),
-    path('menu/', views.menu, name='menu'),
+    path('book_table/', views.book_table, name='book_table'),  # Thêm dòng này
     path('edit-table/<int:table_id>/', views.edit_table, name='edit_table'),
     path('delete-table/<int:table_id>/',
          views.delete_table, name='delete_table'),
