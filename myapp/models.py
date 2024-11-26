@@ -119,7 +119,6 @@ class Table(models.Model):
 class Bill(models.Model):
     table = models.ForeignKey(
         Table, on_delete=models.SET_NULL, null=True, related_name='bills')
-    # Thêm null=True nếu cần thiết
     customer = models.ForeignKey(
         Profile, on_delete=models.CASCADE, null=True, blank=True)
     dishes = models.ManyToManyField(
@@ -129,7 +128,9 @@ class Bill(models.Model):
     time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Bill {self.id} - Table: {self.table.name}"
+        table_name = self.table.name if self.table else "None"
+        return f"Bill {self.id} - Table: {table_name}"
+
 
 
 class BillDish(models.Model):
