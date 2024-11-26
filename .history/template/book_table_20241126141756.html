@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+  <h3 class="mb-4">Danh sách bàn</h3>
+  <div id="my-tables-container" class="row">
+    <!-- Bàn đã đặt sẽ được load qua API -->
+  </div>
+
+  <!-- Nút đặt bàn mới -->
+  <button class="btn btn-primary mt-4" data-toggle="modal" data-target="#newTableModal">Đặt bàn mới</button>
+
+  <!-- Modal Form Đặt Bàn -->
+  <div class="modal fade" id="newTableModal" tabindex="-1" role="dialog" aria-labelledby="newTableModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <form id="table-booking-form">
+          <div class="modal-header">
+            <h5 class="modal-title" id="newTableModalLabel">Đặt Bàn Mới</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="table">Chọn bàn:</label>
+              <select name="table_id" id="table" class="form-control" required>
+                <!-- Bàn có sẵn sẽ được load qua API -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="time">Ngày & giờ:</label>
+              <input type="datetime-local" name="time" id="time" class="form-control" required>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Đặt bàn</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Load bàn đã đặt
+    fetch('/api/tables/')
+      .then(response => response.json())
+      .then(data => {
+        const container = document.getElementById('my-tables-container');
+        if (data.length === 0) {
+          container.innerHTML = `<p>Bạn chưa đặt bàn nào.</p>`;
+        } else {
+          data.forEach(table => {
+            const tableCard = `
+                            <div class="col-md-4 mb-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Bàn: ${table.name}</h5>
+                                        <p>Trạng thái: ${table.is_occupied ? 'Đã đặt' : 'Trống'}</p>
+                                        <!-- Nút chỉnh sửa -->
+                                        <button class="btn btn-warning btn-edit-table" data-id="${table.id}">Chỉnh sửa</button>
+                                        <!-- Nút xoá -->
+                                        <button class="btn btn-danger btn-delete-table" data-id="${table.id}">Xoá</button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+            container.innerHTML += tableCard;
+          });
+        }
+      })
+      .catch(error => console.error('Error fetching tables:', error));
+
+    // Load bàn trống vào modal đặt bàn
+    fetch('/api/tables/?available=true')
+      .then(response => response.json())
+      .then(data => {
+        const tableSelect = document.getElementById('table');
+        data.forEach(table => {
+          const option = `<option value="${table.id}">${table.name}</option>`;
+          tableSelect.innerHTML += option;
+        });
+      });
+
+    // Submit form đặt bàn
+    const form = document.getElementById('table-booking-form');
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const formData = new FormData(form);
+      fetch('/api/book_table/', {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'X-CSRFToken': '{{ csrf_token }}'
+        }
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert('Đặt bàn thành công!');
+            location.reload();
+          } else {
+            alert('Có lỗi xảy ra: ' + data.message);
+          }
+        })
+        .catch(error => console.error('Error booking table:', error));
+    });
+  });
+</script>
+{% endblock %}

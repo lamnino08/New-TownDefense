@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- Carousel Start -->
+<div class="carousel">
+    <div class="container-fluid">
+        <div class="owl-carousel">
+            <div class="carousel-item">
+                <div class="carousel-img">
+                    <img src="/static/img/imghome.jpg" alt="Image">
+                </div>
+                <div class="carousel-text">
+                    <h1>Thành phần <span>Chất lượng</span> Tốt nhất</h1>
+                    <p>THƯỞNG THỨC ẨM THỰC VỚI NÉT ĐẶC TRƯNG RIÊNG VIỆT NAM</p>
+                    <div class="carousel-btn">
+                        <a class="btn custom-btn" href="#" onclick="fetchMenu()">Menu</a>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="carousel-img">
+                    <img src="/static/img/datban.jpg" alt="Image">
+                </div>
+                <div class="carousel-text">
+                    <h1>Đặt <span>Bàn</span></h1>
+                    <p>Để trải nghiệm ẩm thực tuyệt vời của chúng tôi, vui lòng đặt bàn trước.</p>
+                    <div class="carousel-btn">
+                        <a class="btn custom-btn" href="#" onclick="showBookingForm()">Đặt Bàn</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Carousel End -->
+
+<!-- Menu Section -->
+<div id="menu-container" style="display:none; margin-top: 30px;" class="container">
+    <div class="section-header text-center">
+        <h2>Thực đơn món ăn</h2>
+    </div>
+    <div id="menu-items" class="row">
+        <!-- Menu items sẽ được thêm ở đây thông qua JavaScript -->
+    </div>
+</div>
+
+<!-- Booking Form Section -->
+<div id="booking-form" style="display:none; margin-top: 30px;" class="container">
+    <div class="section-header text-center">
+        <h2>Đặt Bàn</h2>
+    </div>
+    <form id="booking-form-element" onsubmit="submitBooking(event)">
+        <div class="form-group">
+            <label for="table">Chọn bàn:</label>
+            <select id="table" class="form-control" required></select>
+        </div>
+        <div class="form-group">
+            <label for="date">Ngày:</label>
+            <input type="date" id="date" name="date" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="time">Thời gian:</label>
+            <input type="time" id="time" name="time" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Đặt Bàn</button>
+    </form>
+</div>
+
+<script>
+    // Fetch menu từ API và hiển thị
+    function fetchMenu() {
+        fetch('/api/dishes/')
+            .then(response => response.json())
+            .then(data => {
+                const menuContainer = document.getElementById('menu-items');
+                menuContainer.innerHTML = ''; // Clear nội dung cũ
+                data.forEach(item => {
+                    const menuItem = `
+                        <div class="col-md-4">
+                            <div class="menu-item">
+                                <div class="menu-img">
+                                    <img src="${item.image}" alt="${item.name}" />
+                                </div>
+                                <div class="menu-text">
+                                    <h3>${item.name} - $${item.price}</h3>
+                                    <p>${item.ingredients}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    menuContainer.insertAdjacentHTML('beforeend', menuItem);
+                });
+                document.getElementById('menu-container').style.display = 'block';
+            })
+            .catch(error => console.error('Error fetching menu:', error));
+    }
+
+    // Hiển thị form đặt bàn
+    function showBookingForm() {
+        fetch('/api/tables/')
+            .then(response => response.json())
+            .then(data => {
+                const tableSelect = document.getElementById('table');
+                tableSelect.innerHTML = ''; // Xóa nội dung cũ
+                data.forEach(table => {
+                    const option = `<option value="${table.id}">${table.name} (${table.is_occupied ? 'Đã đặt' : 'Trống'})</option>`;
+                    tableSelect.insertAdjacentHTML('beforeend', option);
+                });
+                document.getElementById('booking-form').style.display = 'block';
+            })
+            .catch(error => console.error('Error fetching tables:', error));
+    }
+
+    // Xử lý submit form đặt bàn
+    function submitBooking(event) {
+        event.preventDefault();
+        const formData = new FormData(document.getElementById('booking-form-element'));
+        fetch('/api/bookings/', {
+            method: 'POST',
+            body: JSON.stringify({
+                table: formData.get('table'),
+                date: formData.get('date'),
+                time: formData.get('time')
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                alert('Đặt bàn thành công!');
+                document.getElementById('booking-form').style.display = 'none';
+            })
+            .catch(error => console.error('Error submitting booking:', error));
+    }
+</script>
+{% endblock %}
