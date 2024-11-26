@@ -16,10 +16,5 @@ pyOpenSSL==24.2.1
 pytz==2024.2
 requests==2.32.3
 six==1.16.0
-sqlparse @ file:///tmp/build/80754af9/sqlparse_1602184451250/work
-typing-extensions @ file:///tmp/build/80754af9/typing_extensions_1624965014186/work
-urllib3==1.26.6
-wincertstore==0.2
-django-paypal
 sqlparse==0.5.2
 urllib3==2.2.3
