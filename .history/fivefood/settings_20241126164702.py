@@ -12,9 +12,9 @@ TEMPLATE_DIR = os.path.join(BASE_DIR, 'template')
 SECRET_KEY = 'django-insecure-+06=x1aer^924_h5a5+l0sr)fb8p-9xd+#ctxqib1bi^ztu5dw'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['Restaurant_management_4Team.com', '127.0.0.1']
 
 
 # Application definition
