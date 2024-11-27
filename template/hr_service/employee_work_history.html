@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Lịch sử làm việc</title>
+  </head>
+  <body>
+    <h1>Lịch sử làm việc của nhân viên</h1>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>Tên</th>
+          <th>Email</th>
+          <th>Điện thoại</th>
+          <th>Ngày sinh</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in users %}
+        <tr>
+          <td>{{ user.first_name }} {{ user.last_name }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.phone_number }}</td>
+          <td>{{ user.date_of_birth }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="4">Không có nhân viên nào.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </body>
+</html>

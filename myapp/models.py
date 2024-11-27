@@ -1,5 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User 
+from django.conf import settings
 
 # Create your models here.
 
@@ -64,9 +65,9 @@ class Dish(models.Model):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    profile_pic = models.ImageField(
-        upload_to='profiles/%Y/%m/%d', null=True, blank=True)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    
+    profile_pic = models.ImageField(upload_to='profiles/%Y/%m/%d', null=True, blank=True)
     contact_number = models.CharField(max_length=15, null=True, blank=True)
     address = models.TextField(blank=True)
     updated_on = models.DateTimeField(auto_now=True)

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Danh sách ca làm việc</title>
+  </head>
+  <body>
+    <h1>Danh sách ca làm việc</h1>
+    <table border="1">
+      <tr>
+        <th>Loại ca</th>
+        <th>Bắt đầu</th>
+        <th>Kết thúc</th>
+        <th>Số chỗ còn lại</th>
+        <th>Hành động</th>
+      </tr>
+      {% for shift in shifts %}
+      <tr>
+        <td>{{ shift.shift_type }}</td>
+        <td>{{ shift.start_time }}</td>
+        <td>{{ shift.end_time }}</td>
+        <td>{{ shift.remaining_slots }}</td>
+        <td>
+          {% if shift.remaining_slots > 0 %}
+          <form method="POST" action="{% url 'register_shift' %}">
+            {% csrf_token %}
+            <input type="hidden" name="shift_id" value="{{ shift.id }}" />
+            <button type="submit">Đăng ký</button>
+          </form>
+          {% else %} Đã đầy {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </body>
+</html>

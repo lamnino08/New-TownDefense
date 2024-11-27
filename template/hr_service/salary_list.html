@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Bảng lương</title>
+  </head>
+  <body>
+    <h1>Bảng lương</h1>
+    {% if user.is_superuser %}
+    <a href="{% url 'calculate_salary_view' %}">Tính lương cho tháng này</a>
+    {% endif %}
+    <table border="1">
+      <tr>
+        <th>Nhân viên</th>
+        <th>Tháng</th>
+        <th>Số ca làm việc</th>
+        <th>Lương cơ bản</th>
+        <th>Tổng lương</th>
+        {% if user.is_superuser %}
+        <th>Hành động</th>
+        {% endif %}
+      </tr>
+      {% for salary in salaries %}
+      <tr>
+        <td>{{ salary.employee.username }}</td>
+        <td>{{ salary.month|date:"F Y" }}</td>
+        <td>{{ salary.total_shifts }}</td>
+        <td>{{ salary.base_salary }}</td>
+        <td>{{ salary.total_salary }}</td>
+        {% if user.is_superuser %}
+        <td>
+          <a href="{% url 'edit_salary' salary.id %}">Chỉnh sửa</a>
+        </td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+    </table>
+  </body>
+</html>

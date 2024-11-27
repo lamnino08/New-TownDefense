@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Tạo ca làm việc mới</title>
+  </head>
+  <body>
+    <h1>Tạo ca làm việc mới</h1>
+    <form method="post">
+      {% csrf_token %} {{ form.as_p }}
+      <button type="submit">Tạo ca</button>
+    </form>
+  </body>
+</html>
