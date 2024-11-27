@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h1 class="text-center">Đặt bàn</h1>
+  <div id="booked-tables" class="mb-4">
+    <h2>Bàn đã đặt</h2>
+    <div id="booked-list" class="row">
+      <!-- Danh sách bàn đã đặt sẽ được tải từ API -->
+    </div>
+  </div>
+  <button id="new-table-btn" class="btn btn-primary mb-4">Đặt thêm bàn</button>
+  <div id="new-table-form" style="display: none;">
+    <h2>Đặt bàn mới</h2>
+    <form id="book-table-form">
+      <div class="form-group">
+        <label for="table-id">Chọn bàn:</label>
+        <select id="table-id" class="form-control" required>
+          <!-- Bàn khả dụng sẽ được tải từ API -->
+        </select>
+      </div>
+      <button type="submit" class="btn btn-success mt-3">Đặt bàn</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  // Lấy danh sách bàn từ API
+  async function fetchTables() {
+    const response = await fetch('/api/tables/');
+    const tables = await response.json();
+
+    const bookedList = document.getElementById('booked-list');
+    const tableSelect = document.getElementById('table-id');
+    bookedList.innerHTML = '';
+    tableSelect.innerHTML = '<option value="">Chọn bàn</option>';
+
+    tables.forEach(table => {
+      if (table.is_occupied) {
+        const tableCard = `
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Bàn ${table.name}</h5>
+                                <button class="btn btn-danger btn-sm" onclick="releaseTable(${table.id})">Hủy đặt</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+        bookedList.innerHTML += tableCard;
+      } else {
+        tableSelect.innerHTML += `<option value="${table.id}">Bàn ${table.name}</option>`;
+      }
+    });
+  }
+
+  // Đặt bàn
+  document.getElementById('book-table-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const tableId = document.getElementById('table-id').value;
+
+    const response = await fetch('/api/tables/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': '{{ csrf_token }}'
+      },
+      body: JSON.stringify({ table_id: tableId })
+    });
+
+    const data = await response.json();
+    if (response.status === 201) {
+      alert(data.message);
+      fetchTables();
+      document.getElementById('new-table-form').style.display = 'none';
+    } else {
+      alert(data.error);
+    }
+  });
+
+  // Hủy đặt bàn
+  async function releaseTable(tableId) {
+    const response = await fetch(`/api/tables/${tableId}/release/`, {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': '{{ csrf_token }}'
+      }
+    });
+
+    if (response.status === 200) {
+      alert('Bàn đã được hủy đặt.');
+      fetchTables();
+    } else {
+      alert('Không thể hủy đặt bàn.');
+    }
+  }
+
+  // Hiển thị form đặt bàn mới
+  document.getElementById('new-table-btn').addEventListener('click', () => {
+    document.getElementById('new-table-form').style.display = 'block';
+  });
+
+  document.addEventListener('DOMContentLoaded', fetchTables);
+</script>
+{% endblock %}

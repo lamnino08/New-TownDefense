@@ -9,7 +9,7 @@
             </div>
             <div class="col-12">
                 <a href="/">Home</a>
-                <a href="/dishes">Dishes</a>
+                <a href="/dishes">Món ăn</a>
             </div>
         </div>
     </div>
@@ -49,9 +49,9 @@
                         </script>
                     </p>
                     {% if i.is_available %}
-                    <a href="{% url 'dish' id=i.id %}">Order Now</a>
+                    <a href="{% url 'dish' id=i.id %}">Order</a>
                     {% else %}
-                        <p class="text-danger">Not Available for delivery!</p>
+                        <p class="text-danger">Không có sẵn!</p>
                     {% endif %}
                 </div>
             </div>

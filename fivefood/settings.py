@@ -1,9 +1,9 @@
 
 from pathlib import Path
-import os 
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-TEMPLATE_DIR = os.path.join(BASE_DIR,'template')
+TEMPLATE_DIR = os.path.join(BASE_DIR, 'template')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -12,9 +12,9 @@ TEMPLATE_DIR = os.path.join(BASE_DIR,'template')
 SECRET_KEY = 'django-insecure-+06=x1aer^924_h5a5+l0sr)fb8p-9xd+#ctxqib1bi^ztu5dw'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [*]
 
 
 # Application definition
@@ -28,7 +28,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'myapp',
     'paypal.standard.ipn',
-    'hr_service',
+    'inventory',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -110,9 +111,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_DIR = os.path.join(BASE_DIR,'static')
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
 
-STATICFILES_DIRS = [ 
+STATICFILES_DIRS = [
     STATIC_DIR,
 ]
 # Default primary key field type
@@ -121,12 +122,12 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR,"media")
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 PAYPAL_RECEIVER_EMAIL = 'sts.amandeepkaur@gmail.com'
 PAYPAL_TEST = True
 
 HOST = '127.0.0.1:8000'
+LOGIN_URL = '/login/'
 
 AUTH_USER_MODEL = 'hr_service.CustomUser'
-

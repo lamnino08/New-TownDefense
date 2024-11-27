@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.conf import settings
 
 # Create your models here.
+
+
 class Contact(models.Model):
     name = models.CharField(max_length=250)
     email = models.EmailField()
@@ -17,6 +19,7 @@ class Contact(models.Model):
     class Meta:
         verbose_name_plural = "Contact Table"
 
+
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
     image = models.ImageField(upload_to="categories/%Y/%m/%d")
@@ -28,6 +31,7 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+
 class Team(models.Model):
     name = models.CharField(max_length=100)
     designation = models.CharField(max_length=100)
@@ -38,7 +42,8 @@ class Team(models.Model):
     # twitter_url = models.CharField(blank=True,max_length=200)
 
     def __str__(self):
-        return self.name 
+        return self.name
+
 
 class Dish(models.Model):
     name = models.CharField(max_length=200, unique=True)
@@ -53,10 +58,11 @@ class Dish(models.Model):
     updated_on = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.name 
+        return self.name
 
     class Meta:
-        verbose_name_plural ="Dish Table"
+        verbose_name_plural = "Dish Table"
+
 
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -70,7 +76,8 @@ class Profile(models.Model):
         return self.user.first_name
 
     class Meta:
-        verbose_name_plural="Profile Table"
+        verbose_name_plural = "Profile Table"
+
 
 class Order(models.Model):
     customer = models.ForeignKey(Profile, on_delete=models.CASCADE)
@@ -86,9 +93,12 @@ class Order(models.Model):
     class Meta:
         verbose_name_plural = "Order Table"
 
+
 class Table(models.Model):
-    name = models.CharField(max_length=50, unique=True)  # Tên bàn (VD: "Bàn 1")
-    is_occupied = models.BooleanField(default=False)  # Trạng thái bàn (có khách hay không)
+    # Tên bàn (VD: "Bàn 1")
+    name = models.CharField(max_length=50, unique=True)
+    # Trạng thái bàn (có khách hay không)
+    is_occupied = models.BooleanField(default=False)
     current_bill = models.OneToOneField(
         'Bill', on_delete=models.SET_NULL, null=True, blank=True, related_name='table_bill'
     )  # Hóa đơn hiện tại liên kết với bàn
@@ -106,20 +116,28 @@ class Table(models.Model):
     class Meta:
         verbose_name_plural = "Danh sách bàn"
 
+
 class Bill(models.Model):
-    table = models.ForeignKey(Table, on_delete=models.SET_NULL, null=True, related_name='bills')
-    customer = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True, blank=True)  # Thêm null=True nếu cần thiết
-    dishes = models.ManyToManyField(Dish, through='BillDish')  # Liên kết món ăn
+    table = models.ForeignKey(
+        Table, on_delete=models.SET_NULL, null=True, related_name='bills')
+    customer = models.ForeignKey(
+        Profile, on_delete=models.CASCADE, null=True, blank=True)
+    dishes = models.ManyToManyField(
+        Dish, through='BillDish')  # Liên kết món ăn
     total_price = models.FloatField(null=True)
     is_payed = models.BooleanField(default=False)
     time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Bill {self.id} - Table: {self.table.name}"
+        table_name = self.table.name if self.table else "None"
+        return f"Bill {self.id} - Table: {table_name}"
+
 
 class BillDish(models.Model):
-    bill = models.ForeignKey(Bill, on_delete=models.CASCADE)  # Liên kết với Bill
-    dish = models.ForeignKey(Dish, on_delete=models.CASCADE)  # Liên kết với Dish
+    bill = models.ForeignKey(
+        Bill, on_delete=models.CASCADE)  # Liên kết với Bill
+    dish = models.ForeignKey(
+        Dish, on_delete=models.CASCADE)  # Liên kết với Dish
     note = models.TextField(blank=True, null=True)
     quantity = models.IntegerField(default=1)  # Số lượng món ăn
 
