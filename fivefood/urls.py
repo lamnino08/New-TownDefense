@@ -6,7 +6,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',views.index,name="index"),
+    path('', views.index, name="index"),
     path('contact/',views.contact_us,name="contact"),
     path('about/',views.about,name="about"),
     path('team/',views.team_members,name="team"),
@@ -17,8 +17,11 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),
     path('logout/', views.user_logout, name='logout'),
     path('dish/<int:id>/', views.single_dish, name='dish'),
-
     path('paypal/',include('paypal.standard.ipn.urls')),
     path('payment_done/', views.payment_done, name='payment_done'),
     path('payment_cancel/', views.payment_cancel, name='payment_cancel'),
+    path('hr/', include('hr_service.urls')),  
+
+    
+
 ]+static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
