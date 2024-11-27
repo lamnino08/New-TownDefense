@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'paypal.standard.ipn',
     'inventory',
     'rest_framework',
+    'hr_service'
 ]
 
 MIDDLEWARE = [
