@@ -124,3 +124,5 @@ PAYPAL_TEST = True
 
 HOST = '127.0.0.1:8000'
 LOGIN_URL = '/login/'
+
+AUTH_USER_MODEL = 'hr_service.CustomUser'

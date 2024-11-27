@@ -478,46 +478,50 @@ def edit_table_api(request, table_id):
         return JsonResponse({"success": False, "message": "Chỉ hỗ trợ phương thức PUT."}, status=405)
 
 
+@csrf_exempt
 @login_required
 def add_to_bill(request):
-    if request.method == "POST":
-        data = json.loads(request.body)
-        dish_id = data.get("dish_id")
-        quantity = data.get("quantity", 1)
-        note = data.get("note", "")
-
+    if request.method == 'POST':
         try:
-            # Lấy món ăn
-            dish = Dish.objects.get(id=dish_id)
+            # Lấy dữ liệu từ request body
+            data = json.loads(request.body)
+            dish_id = data.get('dish_id')
+            table_id = data.get('table_id')
+            quantity = data.get('quantity', 1)
 
-            # Lấy hóa đơn chưa thanh toán
-            profile = request.user.profile
-            bill, created = Bill.objects.get_or_create(
-                customer=profile, is_payed=False
-            )
+            # Kiểm tra xem bàn có hợp lệ và đã được đặt chưa
+            try:
+                table = Table.objects.get(id=table_id)
+                bill = Bill.objects.get(
+                    table=table, customer__user=request.user, is_payed=False)
+            except (Table.DoesNotExist, Bill.DoesNotExist):
+                return JsonResponse({"success": False, "message": "Bàn chưa được đặt hoặc không hợp lệ."}, status=400)
 
-            # Thêm hoặc cập nhật món ăn
+            # Kiểm tra xem món ăn có tồn tại hay không
+            try:
+                dish = Dish.objects.get(id=dish_id)
+            except Dish.DoesNotExist:
+                return JsonResponse({"success": False, "message": "Không tìm thấy món ăn."}, status=400)
+
+            # Thêm hoặc cập nhật món ăn trong hóa đơn
             bill_dish, created = BillDish.objects.get_or_create(
                 bill=bill,
                 dish=dish,
-                defaults={'quantity': quantity, 'note': note}
+                defaults={
+                    "quantity": quantity,
+                }
             )
+
             if not created:
                 bill_dish.quantity += quantity
                 bill_dish.save()
 
-            # Cập nhật tổng giá
-            bill.total_price = sum(
-                item.dish.discounted_price * item.quantity for item in bill.billdish_set.all()
-            )
-            bill.save()
+            return JsonResponse({"success": True, "message": "Đã thêm món ăn vào hóa đơn."})
 
-            return JsonResponse({"success": True, "message": "Thêm món ăn vào hóa đơn thành công."})
-        except Dish.DoesNotExist:
-            return JsonResponse({"success": False, "message": "Không tìm thấy món ăn."})
         except Exception as e:
-            return JsonResponse({"success": False, "message": str(e)})
-    return JsonResponse({"success": False, "message": "Phương thức không hợp lệ."})
+            return JsonResponse({"success": False, "message": f"Đã xảy ra lỗi: {str(e)}"}, status=500)
+
+    return JsonResponse({"success": False, "message": "Yêu cầu không hợp lệ."}, status=400)
 
 
 @csrf_exempt
@@ -534,37 +538,19 @@ def delete_bill(request, bill_id):
 
 @login_required
 def my_bills(request):
-    try:
-        # Lấy tất cả hóa đơn của người dùng
-        bills = Bill.objects.filter(customer=request.user.profile)
+    # Lấy danh sách hóa đơn chưa thanh toán của người dùng
+    bills = Bill.objects.filter(customer=request.user.profile, is_payed=False)
 
-        if not bills.exists():
-            return render(request, 'my_bills.html', {'bill_data': [], 'error': 'Bạn chưa có hóa đơn nào.'})
+    # Chuẩn bị dữ liệu hóa đơn để hiển thị
+    bill_data = []
+    for bill in bills:
+        dishes = BillDish.objects.filter(bill=bill)
+        bill_data.append({
+            'bill': bill,
+            'dishes': dishes,
+        })
 
-        # Chuẩn bị dữ liệu hóa đơn
-        bill_data = []
-        for bill in bills:
-            dishes = BillDish.objects.filter(bill=bill)
-            bill_info = {
-                'bill': bill,
-                'dishes': [
-                    {
-                        'id': dish.id,
-                        'name': dish.dish.name,
-                        'quantity': dish.quantity,
-                        'price': dish.dish.discounted_price * dish.quantity,  # Tính tổng giá
-                        'note': dish.note
-                    }
-                    for dish in dishes
-                ],
-                'total_price': sum(dish.dish.discounted_price * dish.quantity for dish in dishes),
-            }
-            bill_data.append(bill_info)
-
-        return render(request, 'my_bills.html', {'bill_data': bill_data})
-    except Exception as e:
-        print(f"Lỗi xảy ra: {str(e)}")
-        return render(request, 'my_bills.html', {'bill_data': [], 'error': 'Đã xảy ra lỗi khi tải hóa đơn.'})
+    return render(request, 'my_bills.html', {'bill_data': bill_data})
 
 
 @login_required

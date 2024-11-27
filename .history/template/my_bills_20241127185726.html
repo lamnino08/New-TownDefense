@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- Page Header Start -->
+<div class="page-header mb-0">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <h2>Thực đơn món ăn</h2>
+      </div>
+      <div class="col-12">
+        <a href="/">Trang chủ</a>
+        <a href="/menu/">Menu</a>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Page Header End -->
+
+<div class="container mt-5">
+  <h2>Hóa đơn của tôi</h2>
+
+  {% if bill_data %}
+  {% for bill_info in bill_data %}
+  <div class="card my-3">
+    <div class="card-header">
+      <h5>Hóa đơn: {{ bill_info.bill.id }}</h5>
+      <p>Bàn: {{ bill_info.bill.table.name }}</p>
+      <p>Ngày đặt: {{ bill_info.bill.time }}</p>
+    </div>
+    <div class="card-body">
+      <h6>Món ăn:</h6>
+      <ul>
+        {% for dish in bill_info.dishes %}
+        <li>
+          <strong>{{ dish.dish.name }}</strong> -
+          Số lượng: {{ dish.quantity }} -
+          Giá: {{ dish.price|floatformat:0 }} VND
+          <form method="post" action="{% url 'remove_dish_from_bill' dish.id %}" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
+          </form>
+        </li>
+        {% endfor %}
+      </ul>
+      <h6>Tổng tiền: {{ bill_info.total_price|floatformat:0 }} VND</h6>
+    </div>
+    <div class="card-footer">
+      <form method="post" action="{% url 'delete_bill' bill_info.bill.id %}" class="d-inline">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Xóa hóa đơn</button>
+      </form>
+    </div>
+  </div>
+  {% endfor %}
+  {% else %}
+  <p>Bạn chưa có hóa đơn nào.</p>
+  {% endif %}
+</div>
+{% endblock %}

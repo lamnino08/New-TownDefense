@@ -490,13 +490,12 @@ def add_to_bill(request):
             # Lấy món ăn
             dish = Dish.objects.get(id=dish_id)
 
-            # Lấy hóa đơn chưa thanh toán
+            # Lấy hóa đơn chưa thanh toán của người dùng
             profile = request.user.profile
             bill, created = Bill.objects.get_or_create(
-                customer=profile, is_payed=False
-            )
+                customer=profile, is_payed=False)
 
-            # Thêm hoặc cập nhật món ăn
+            # Thêm hoặc cập nhật món ăn trong hóa đơn
             bill_dish, created = BillDish.objects.get_or_create(
                 bill=bill,
                 dish=dish,
@@ -504,19 +503,14 @@ def add_to_bill(request):
             )
             if not created:
                 bill_dish.quantity += quantity
+                bill_dish.note = note
                 bill_dish.save()
-
-            # Cập nhật tổng giá
-            bill.total_price = sum(
-                item.dish.discounted_price * item.quantity for item in bill.billdish_set.all()
-            )
-            bill.save()
 
             return JsonResponse({"success": True, "message": "Thêm món ăn vào hóa đơn thành công."})
         except Dish.DoesNotExist:
-            return JsonResponse({"success": False, "message": "Không tìm thấy món ăn."})
-        except Exception as e:
-            return JsonResponse({"success": False, "message": str(e)})
+            return JsonResponse({"success": False, "message": "Không tìm thấy thông tin món ăn."})
+        except Profile.DoesNotExist:
+            return JsonResponse({"success": False, "message": "Không tìm thấy hồ sơ người dùng."})
     return JsonResponse({"success": False, "message": "Phương thức không hợp lệ."})
 
 
@@ -535,11 +529,9 @@ def delete_bill(request, bill_id):
 @login_required
 def my_bills(request):
     try:
-        # Lấy tất cả hóa đơn của người dùng
-        bills = Bill.objects.filter(customer=request.user.profile)
-
-        if not bills.exists():
-            return render(request, 'my_bills.html', {'bill_data': [], 'error': 'Bạn chưa có hóa đơn nào.'})
+        # Lấy hóa đơn chưa thanh toán của người dùng
+        bills = Bill.objects.filter(
+            customer=request.user.profile, is_payed=False)
 
         # Chuẩn bị dữ liệu hóa đơn
         bill_data = []
@@ -549,7 +541,6 @@ def my_bills(request):
                 'bill': bill,
                 'dishes': [
                     {
-                        'id': dish.id,
                         'name': dish.dish.name,
                         'quantity': dish.quantity,
                         'price': dish.dish.discounted_price * dish.quantity,  # Tính tổng giá
@@ -562,9 +553,8 @@ def my_bills(request):
             bill_data.append(bill_info)
 
         return render(request, 'my_bills.html', {'bill_data': bill_data})
-    except Exception as e:
-        print(f"Lỗi xảy ra: {str(e)}")
-        return render(request, 'my_bills.html', {'bill_data': [], 'error': 'Đã xảy ra lỗi khi tải hóa đơn.'})
+    except Profile.DoesNotExist:
+        return render(request, 'my_bills.html', {'bill_data': [], 'error': 'Không tìm thấy hồ sơ người dùng.'})
 
 
 @login_required

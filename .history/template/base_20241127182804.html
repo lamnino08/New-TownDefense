@@ -46,6 +46,7 @@
                     <a href="{% url 'menu' %}" class="nav-item nav-link">Menu</a>
                     <a href="{% url 'contact' %}" class="nav-item nav-link">Liên Hệ</a>
                     {% if user.is_authenticated %}
+                    <a href="{% url 'my_bills' %}" class="nav-item nav-link">Hóa đơn của tôi</a>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"><i
                                 class="fas fa-user"></i></a>
@@ -55,7 +56,6 @@
                             {% else %}
                             <a href="{% url 'dashboard' %}" class="dropdown-item">Dashboard</a>
                             {% endif %}
-                            <a href="{% url 'my_bills' %}" class="dropdown-item">Hóa đơn của tôi</a>
                             <a href="{% url 'logout' %}" class="dropdown-item">Logout</a>
                         </div>
                     </div>

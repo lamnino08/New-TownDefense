@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- Page Header Start -->
+<div class="page-header mb-0">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <h2>Menu</h2>
+      </div>
+      <div class="col-12">
+        <a href="/">Home</a>
+        <a href="/menu/">Menu</a>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Page Header End -->
+
+<div class="container mt-5">
+  <h3 class="mb-4">Danh sách món ăn</h3>
+  <div id="menu-container" class="row">
+    <!-- Các món ăn sẽ được load qua API -->
+  </div>
+</div>
+
+<!-- Modal Chọn Bàn -->
+<div class="modal fade" id="addToBillModal" tabindex="-1" role="dialog" aria-labelledby="addToBillModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <form id="add-to-bill-form">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addToBillModalLabel">Thêm món vào hóa đơn</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="table-select">Chọn bàn:</label>
+            <select id="table-select" class="form-control" required>
+              <!-- Bàn sẽ được load qua API -->
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="dish-quantity">Số lượng:</label>
+            <input type="number" id="dish-quantity" class="form-control" min="1" value="1" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Thêm vào hóa đơn</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  let selectedDishId = null;
+
+  document.addEventListener('DOMContentLoaded', function () {
+    // Load danh sách món ăn
+    fetch('/api/dishes/')
+      .then(response => response.json())
+      .then(data => {
+        const container = document.getElementById('menu-container');
+        container.innerHTML = '';
+        if (data.length === 0) {
+          container.innerHTML = `<p>Không có món ăn nào.</p>`;
+        } else {
+          data.forEach(dish => {
+            const dishCard = `
+                            <div class="col-md-4 mb-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">${dish.name}</h5>
+                                        <p>Giá: ${dish.discounted_price || dish.price}.000 VND</p>
+                                        <button class="btn btn-primary btn-add-to-bill" data-id="${dish.id}">Thêm vào hóa đơn</button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+            container.innerHTML += dishCard;
+          });
+
+          // Gắn sự kiện cho nút Thêm vào hóa đơn
+          document.querySelectorAll('.btn-add-to-bill').forEach(button => {
+            button.addEventListener('click', function () {
+              selectedDishId = this.dataset.id;
+              loadTables();
+              $('#addToBillModal').modal('show');
+            });
+          });
+        }
+      })
+      .catch(error => console.error('Error fetching dishes:', error));
+
+    // Load danh sách bàn
+    function loadTables() {
+      fetch('/api/tables/')
+        .then(response => response.json())
+        .then(data => {
+          const tableSelect = document.getElementById('table-select');
+          tableSelect.innerHTML = '';
+          if (data.length === 0) {
+            tableSelect.innerHTML = `<option value="">Không có bàn nào</option>`;
+          } else {
+            data.forEach(table => {
+              const option = `<option value="${table.id}">${table.name}</option>`;
+              tableSelect.innerHTML += option;
+            });
+          }
+        })
+        .catch(error => console.error('Error fetching tables:', error));
+    }
+
+    // Xử lý form thêm vào hóa đơn
+    document.getElementById('add-to-bill-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const tableId = document.getElementById('table-select').value;
+      const quantity = document.getElementById('dish-quantity').value;
+
+      fetch('/api/add_to_bill/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: JSON.stringify({
+          dish_id: selectedDishId,
+          table_id: tableId,
+          quantity: quantity
+        })
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert(data.message);
+            $('#addToBillModal').modal('hide');
+          } else {
+            alert("Có lỗi xảy ra: " + data.message);
+          }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+  });
+</script>
+
+<style>
+  .card {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .card-body {
+    text-align: center;
+  }
+
+  .btn {
+    margin-top: 10px;
+  }
+</style>
+{% endblock %}

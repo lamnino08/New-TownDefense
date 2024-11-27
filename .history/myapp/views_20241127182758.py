@@ -478,46 +478,42 @@ def edit_table_api(request, table_id):
         return JsonResponse({"success": False, "message": "Chỉ hỗ trợ phương thức PUT."}, status=405)
 
 
+@csrf_exempt
 @login_required
 def add_to_bill(request):
-    if request.method == "POST":
+    if request.method == 'POST':
         data = json.loads(request.body)
-        dish_id = data.get("dish_id")
-        quantity = data.get("quantity", 1)
-        note = data.get("note", "")
+        dish_id = data.get('dish_id')
+        table_id = data.get('table_id')
+        quantity = data.get('quantity', 1)
 
+        # Kiểm tra bàn đã được đặt
         try:
-            # Lấy món ăn
+            table = Table.objects.get(id=table_id)
+            bill = Bill.objects.get(
+                table=table, customer__user=request.user, is_payed=False)
+        except (Table.DoesNotExist, Bill.DoesNotExist):
+            return JsonResponse({"success": False, "message": "Bàn chưa được đặt hoặc không hợp lệ."}, status=400)
+
+        # Kiểm tra món ăn
+        try:
             dish = Dish.objects.get(id=dish_id)
-
-            # Lấy hóa đơn chưa thanh toán
-            profile = request.user.profile
-            bill, created = Bill.objects.get_or_create(
-                customer=profile, is_payed=False
-            )
-
-            # Thêm hoặc cập nhật món ăn
-            bill_dish, created = BillDish.objects.get_or_create(
-                bill=bill,
-                dish=dish,
-                defaults={'quantity': quantity, 'note': note}
-            )
-            if not created:
-                bill_dish.quantity += quantity
-                bill_dish.save()
-
-            # Cập nhật tổng giá
-            bill.total_price = sum(
-                item.dish.discounted_price * item.quantity for item in bill.billdish_set.all()
-            )
-            bill.save()
-
-            return JsonResponse({"success": True, "message": "Thêm món ăn vào hóa đơn thành công."})
         except Dish.DoesNotExist:
-            return JsonResponse({"success": False, "message": "Không tìm thấy món ăn."})
-        except Exception as e:
-            return JsonResponse({"success": False, "message": str(e)})
-    return JsonResponse({"success": False, "message": "Phương thức không hợp lệ."})
+            return JsonResponse({"success": False, "message": "Không tìm thấy món ăn."}, status=400)
+
+        # Thêm món ăn vào hóa đơn
+        bill_dish, created = BillDish.objects.get_or_create(
+            bill=bill, dish=dish,
+            defaults={"quantity": quantity,
+                      "price": dish.discounted_price or dish.price}
+        )
+
+        # Nếu món đã tồn tại, cập nhật số lượng
+        if not created:
+            bill_dish.quantity += quantity
+            bill_dish.save()
+
+        return JsonResponse({"success": True, "message": "Đã thêm món ăn vào hóa đơn."})
 
 
 @csrf_exempt
@@ -534,58 +530,28 @@ def delete_bill(request, bill_id):
 
 @login_required
 def my_bills(request):
-    try:
-        # Lấy tất cả hóa đơn của người dùng
-        bills = Bill.objects.filter(customer=request.user.profile)
-
-        if not bills.exists():
-            return render(request, 'my_bills.html', {'bill_data': [], 'error': 'Bạn chưa có hóa đơn nào.'})
-
-        # Chuẩn bị dữ liệu hóa đơn
-        bill_data = []
-        for bill in bills:
-            dishes = BillDish.objects.filter(bill=bill)
-            bill_info = {
-                'bill': bill,
-                'dishes': [
-                    {
-                        'id': dish.id,
-                        'name': dish.dish.name,
-                        'quantity': dish.quantity,
-                        'price': dish.dish.discounted_price * dish.quantity,  # Tính tổng giá
-                        'note': dish.note
-                    }
-                    for dish in dishes
-                ],
-                'total_price': sum(dish.dish.discounted_price * dish.quantity for dish in dishes),
-            }
-            bill_data.append(bill_info)
-
-        return render(request, 'my_bills.html', {'bill_data': bill_data})
-    except Exception as e:
-        print(f"Lỗi xảy ra: {str(e)}")
-        return render(request, 'my_bills.html', {'bill_data': [], 'error': 'Đã xảy ra lỗi khi tải hóa đơn.'})
+    profile = Profile.objects.get(user=request.user)
+    bills = Bill.objects.filter(customer=profile).select_related('table')
+    bill_details = [
+        {
+            "bill": bill,
+            "dishes": BillDish.objects.filter(bill=bill).select_related('dish')
+        }
+        for bill in bills
+    ]
+    return render(request, 'my_bills.html', {"bill_details": bill_details})
 
 
+@csrf_exempt
 @login_required
-def remove_dish_from_bill(request, dish_id):
+def delete_dish(request, dish_id):
     try:
-        bill_dish = BillDish.objects.get(
-            id=dish_id, bill__customer=request.user.profile)
-        bill_dish.delete()
-        return redirect('my_bills')
+        dish = BillDish.objects.get(
+            id=dish_id, bill__customer__user=request.user)
+        dish.delete()
+        return JsonResponse({"success": True, "message": "Món ăn đã được xóa thành công."})
     except BillDish.DoesNotExist:
-        return redirect('my_bills')
-
-
-@login_required
-def delete_bill(request, bill_id):
-    try:
-        bill = Bill.objects.get(id=bill_id, customer=request.user.profile)
-        bill.delete()
-        return redirect('my_bills')
-    except Bill.DoesNotExist:
-        return redirect('my_bills')
+        return JsonResponse({"success": False, "message": "Không tìm thấy món ăn."}, status=404)
 
 
 @csrf_exempt
@@ -604,10 +570,3 @@ def update_quantity(request):
             return JsonResponse({"success": True, "message": "Cập nhật số lượng thành công."})
         except BillDish.DoesNotExist:
             return JsonResponse({"success": False, "message": "Không tìm thấy món ăn."}, status=404)
-
-
-@login_required
-def my_bills(request):
-    # Lấy tất cả các hóa đơn liên quan đến người dùng hiện tại
-    bills = Bill.objects.filter(customer=request.user.profile)
-    return render(request, 'my_bills.html', {'bills': bills})

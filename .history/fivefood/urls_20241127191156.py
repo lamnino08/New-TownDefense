@@ -4,7 +4,7 @@ from myapp import views
 from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
-from myapp.views import DishViewSet, CategoryViewSet, TableViewSet, add_to_bill, remove_dish_from_bill, delete_bill
+from myapp.views import DishViewSet, CategoryViewSet, TableViewSet, add_to_bill, remove_dish_from_bill
 
 router = DefaultRouter()
 router.register(r'dishes', DishViewSet, basename='dishes')

@@ -478,136 +478,57 @@ def edit_table_api(request, table_id):
         return JsonResponse({"success": False, "message": "Chỉ hỗ trợ phương thức PUT."}, status=405)
 
 
+@csrf_exempt
 @login_required
-def add_to_bill(request):
-    if request.method == "POST":
-        data = json.loads(request.body)
-        dish_id = data.get("dish_id")
-        quantity = data.get("quantity", 1)
-        note = data.get("note", "")
-
+def add_to_order(request):
+    if request.method == 'POST':
         try:
-            # Lấy món ăn
-            dish = Dish.objects.get(id=dish_id)
+            data = json.loads(request.body)
 
-            # Lấy hóa đơn chưa thanh toán
-            profile = request.user.profile
+            # Lấy dữ liệu từ yêu cầu
+            dish_id = data.get('dish_id')
+            table_id = data.get('table_id')
+            quantity = data.get('quantity', 1)
+
+            # Kiểm tra dữ liệu
+            if not dish_id or not table_id:
+                return JsonResponse({"success": False, "message": "Thiếu thông tin món ăn hoặc bàn."}, status=400)
+
+            if not isinstance(quantity, int) or quantity <= 0:
+                return JsonResponse({"success": False, "message": "Số lượng không hợp lệ."}, status=400)
+
+            # Kiểm tra món ăn
+            try:
+                dish = Dish.objects.get(id=dish_id)
+            except Dish.DoesNotExist:
+                return JsonResponse({"success": False, "message": "Không tìm thấy thông tin món ăn."}, status=400)
+
+            # Kiểm tra bàn
+            try:
+                table = Table.objects.get(id=table_id)
+            except Table.DoesNotExist:
+                return JsonResponse({"success": False, "message": "Không tìm thấy thông tin bàn."}, status=400)
+
+            # Xử lý thêm món vào hóa đơn
             bill, created = Bill.objects.get_or_create(
-                customer=profile, is_payed=False
+                table=table, is_payed=False,
+                defaults={'total_price': 0}
             )
 
-            # Thêm hoặc cập nhật món ăn
-            bill_dish, created = BillDish.objects.get_or_create(
+            # Thêm món ăn vào hóa đơn
+            BillDish.objects.create(
                 bill=bill,
                 dish=dish,
-                defaults={'quantity': quantity, 'note': note}
+                quantity=quantity
             )
-            if not created:
-                bill_dish.quantity += quantity
-                bill_dish.save()
 
-            # Cập nhật tổng giá
-            bill.total_price = sum(
-                item.dish.discounted_price * item.quantity for item in bill.billdish_set.all()
-            )
+            # Cập nhật tổng tiền hóa đơn
+            bill.total_price += dish.discounted_price * quantity
             bill.save()
 
-            return JsonResponse({"success": True, "message": "Thêm món ăn vào hóa đơn thành công."})
-        except Dish.DoesNotExist:
-            return JsonResponse({"success": False, "message": "Không tìm thấy món ăn."})
-        except Exception as e:
-            return JsonResponse({"success": False, "message": str(e)})
-    return JsonResponse({"success": False, "message": "Phương thức không hợp lệ."})
+            return JsonResponse({"success": True, "message": "Thêm món vào hóa đơn thành công."})
 
+        except json.JSONDecodeError:
+            return JsonResponse({"success": False, "message": "Dữ liệu không hợp lệ."}, status=400)
 
-@csrf_exempt
-@login_required
-def delete_bill(request, bill_id):
-    try:
-        # Lấy hóa đơn thuộc người dùng hiện tại
-        bill = Bill.objects.get(id=bill_id, customer__user=request.user)
-        bill.delete()  # Xóa hóa đơn
-        return JsonResponse({"success": True, "message": "Hóa đơn đã được xóa thành công."})
-    except Bill.DoesNotExist:
-        return JsonResponse({"success": False, "message": "Không tìm thấy hóa đơn."}, status=404)
-
-
-@login_required
-def my_bills(request):
-    try:
-        # Lấy tất cả hóa đơn của người dùng
-        bills = Bill.objects.filter(customer=request.user.profile)
-
-        if not bills.exists():
-            return render(request, 'my_bills.html', {'bill_data': [], 'error': 'Bạn chưa có hóa đơn nào.'})
-
-        # Chuẩn bị dữ liệu hóa đơn
-        bill_data = []
-        for bill in bills:
-            dishes = BillDish.objects.filter(bill=bill)
-            bill_info = {
-                'bill': bill,
-                'dishes': [
-                    {
-                        'id': dish.id,
-                        'name': dish.dish.name,
-                        'quantity': dish.quantity,
-                        'price': dish.dish.discounted_price * dish.quantity,  # Tính tổng giá
-                        'note': dish.note
-                    }
-                    for dish in dishes
-                ],
-                'total_price': sum(dish.dish.discounted_price * dish.quantity for dish in dishes),
-            }
-            bill_data.append(bill_info)
-
-        return render(request, 'my_bills.html', {'bill_data': bill_data})
-    except Exception as e:
-        print(f"Lỗi xảy ra: {str(e)}")
-        return render(request, 'my_bills.html', {'bill_data': [], 'error': 'Đã xảy ra lỗi khi tải hóa đơn.'})
-
-
-@login_required
-def remove_dish_from_bill(request, dish_id):
-    try:
-        bill_dish = BillDish.objects.get(
-            id=dish_id, bill__customer=request.user.profile)
-        bill_dish.delete()
-        return redirect('my_bills')
-    except BillDish.DoesNotExist:
-        return redirect('my_bills')
-
-
-@login_required
-def delete_bill(request, bill_id):
-    try:
-        bill = Bill.objects.get(id=bill_id, customer=request.user.profile)
-        bill.delete()
-        return redirect('my_bills')
-    except Bill.DoesNotExist:
-        return redirect('my_bills')
-
-
-@csrf_exempt
-@login_required
-def update_quantity(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        dish_id = data.get('dish_id')
-        quantity = data.get('quantity')
-
-        try:
-            dish = BillDish.objects.get(
-                id=dish_id, bill__customer__user=request.user)
-            dish.quantity = quantity
-            dish.save()
-            return JsonResponse({"success": True, "message": "Cập nhật số lượng thành công."})
-        except BillDish.DoesNotExist:
-            return JsonResponse({"success": False, "message": "Không tìm thấy món ăn."}, status=404)
-
-
-@login_required
-def my_bills(request):
-    # Lấy tất cả các hóa đơn liên quan đến người dùng hiện tại
-    bills = Bill.objects.filter(customer=request.user.profile)
-    return render(request, 'my_bills.html', {'bills': bills})
+    return JsonResponse({"success": False, "message": "Phương thức không được hỗ trợ."}, status=405)
